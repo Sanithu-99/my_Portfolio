@@ -359,41 +359,86 @@
             margin-bottom: 1rem;
         }
 
-       <section id="projects">
-    <h2 class="section-title">Projects</h2>
-    <div class="projects-grid">
-        <div class="project-card">
-            <div class="project-image">
-                <!-- You can replace this text or icon with an actual image if you want -->
-                💰
-            </div>
-            <div class="project-content">
-                <h3 class="project-title">Hum Cash</h3>
-                <p class="project-description">
-                    A personalized finance management app that helps users track expenses, manage budgets, and achieve financial goals with smart AI assistance.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Firebase</span>
-                    <span class="tech-tag">Kivy</span>
-                    <span class="tech-tag">AES Encryption</span>
-                    <span class="tech-tag">AI Recommendations</span>
-                </div>
-                <div class="project-links">
-                    <a class="project-link" href="https://github.com/Sanithu-99/hum-cash" target="_blank">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                    <!-- Optional: If there's a live demo -->
-                    <!--
-                    <a class="project-link" href="https://your-demo-link.com" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Live Demo
-                    </a>
-                    -->
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+       /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .project-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tag {
+            background: #f8f9fa;
+            color: #667eea;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: color 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: #764ba2;
+        }
         /* Contact Section */
         .contact {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -675,86 +720,41 @@
         </div>
     </section>
 
-     /* Projects Section */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .project-image {
-            height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 3rem;
-        }
-
-        .project-content {
-            padding: 2rem;
-        }
-
-        .project-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .project-description {
-            color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .tech-tag {
-            background: #f8f9fa;
-            color: #667eea;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .project-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .project-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            transition: color 0.3s ease;
-        }
-
-        .project-link:hover {
-            color: #764ba2;
-        }
+     <section id="projects">
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid">
+        <div class="project-card">
+            <div class="project-image">
+                <!-- You can replace this text or icon with an actual image if you want -->
+                💰
+            </div>
+            <div class="project-content">
+                <h3 class="project-title">Hum Cash</h3>
+                <p class="project-description">
+                    A personalized finance management app that helps users track expenses, manage budgets, and achieve financial goals with smart AI assistance.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Firebase</span>
+                    <span class="tech-tag">Kivy</span>
+                    <span class="tech-tag">AES Encryption</span>
+                    <span class="tech-tag">AI Recommendations</span>
+                </div>
+                <div class="project-links">
+                    <a class="project-link" href="https://github.com/Sanithu-99/hum-cash" target="_blank">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <!-- Optional: If there's a live demo -->
+                    <!--
+                    <a class="project-link" href="https://your-demo-link.com" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Live Demo
+                    </a>
+                    -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
     <!-- Contact Section -->
     <section id="contact" class="contact section">
         <h2 class="section-title">Let's Work Together</h2>
