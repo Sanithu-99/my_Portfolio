@@ -39,9 +39,9 @@ This portfolio is not just a project — it's a living representation of my dedi
 
 If you like what you see or want to work together on something cool, feel free to reach out!
 
-📧 sanithu.hulathduwage@gmail.com
-📞 +1 (940) 782-3995
-＠ sanithu.official [Instagram]
+- 📧 sanithu.hulathduwage@gmail.com
+- 📞 +1 (940) 782-3995
+- ＠ sanithu.official [Instagram]
 
 ---
 
