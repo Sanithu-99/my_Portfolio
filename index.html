@@ -1,822 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanithu Hulathduwage - Portfolio</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* Header & Navigation */
-        .header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: #667eea;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu {
-            display: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.1)" points="0,1000 1000,0 1000,1000"/></svg>');
-            background-size: cover;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-            padding: 0 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards;
-        }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.3s forwards;
-        }
-
-        .hero-roles {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.6s forwards;
-        }
-
-        .role-tag {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.9s forwards;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: white;
-            color: #667eea;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: #667eea;
-        }
-
-        .btn-resume {
-    background: white;
-    color: #667eea;
-    padding: 12px 35px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border-radius: 30px;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.3s ease;
-}
-
-.btn-resume:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-
-        /* Sections */
-        .section {
-            padding: 5rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* About Section */
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .about-image {
-            position: relative;
-        }
-
-        .about-image img {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .about-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-        }
-
-        /* Skills Section */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-category {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .skill-category:hover {
-            transform: translateY(-5px);
-        }
-
-        .skill-category h3 {
-            color: #667eea;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .skills-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .skill-tag {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* Experience Section */
-        .experience-timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .experience-timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transform: translateX(-50%);
-        }
-
-        .experience-item {
-            position: relative;
-            margin-bottom: 3rem;
-            width: 45%;
-        }
-
-        .experience-item:nth-child(odd) {
-            left: 0;
-            text-align: right;
-        }
-
-        .experience-item:nth-child(even) {
-            left: 55%;
-            text-align: left;
-        }
-
-        .experience-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .experience-content::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            width: 0;
-            height: 0;
-            border: 10px solid transparent;
-        }
-
-        .experience-item:nth-child(odd) .experience-content::before {
-            right: -20px;
-            border-left-color: white;
-        }
-
-        .experience-item:nth-child(even) .experience-content::before {
-            left: -20px;
-            border-right-color: white;
-        }
-
-        .experience-date {
-            color: #667eea;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .experience-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .experience-company {
-            color: #666;
-            margin-bottom: 1rem;
-        }
-
-       /* Projects Section */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .project-image {
-            height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 3rem;
-        }
-
-        .project-content {
-            padding: 2rem;
-        }
-
-        .project-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .project-description {
-            color: #666;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .tech-tag {
-            background: #f8f9fa;
-            color: #667eea;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .project-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .project-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            transition: color 0.3s ease;
-        }
-
-        .project-link:hover {
-            color: #764ba2;
-        }
-        /* Contact Section */
-        .contact {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-        }
-
-        .contact .section-title {
-            color: white;
-            background: none;
-            -webkit-text-fill-color: white;
-        }
-
-        .contact-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .social-link {
-            color: white;
-            font-size: 4.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .social-link:hover {
-            transform: translateY(-3px);
-        }
-
-        /* Footer */
-        .footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu {
-                display: block;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .experience-timeline::before {
-                left: 20px;
-            }
-
-            .experience-item {
-                width: 100%;
-                left: 40px !important;
-                text-align: left !important;
-            }
-
-            .experience-item .experience-content::before {
-                left: -20px !important;
-                border-right-color: white !important;
-                border-left-color: transparent !important;
-            }
-
-            .section {
-                padding: 3rem 5%;
-            }
-
-            .contact-info {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sanithu Hulathduwage — Founder • Engineer • Designer</title>
+  <meta name="description" content="Founder & software engineer turning vision into reality. Building Velant.ai and more. View projects, case studies, and get in touch." />
+  <meta name="theme-color" content="#6b6bff"/>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23667eea'/%3E%3Cstop stop-color='%23764ba2' offset='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='60' cy='60' r='56' fill='url(%23g)'/%3E%3Ctext x='50%' y='58%' text-anchor='middle' font-size='64' font-family='Arial' dy='.3em' fill='white'%3ESH%3C/text%3E%3C/svg%3E"/>
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sanithu Hulathduwage — Portfolio" />
+  <meta property="og:description" content="Founder & software engineer turning vision into reality." />
+  <meta property="og:image" content="profile.jpg" />
+  <meta name="twitter:card" content="summary_large_image"/>
+
+  <style>
+    :root{
+      --bg: #0b0b12;      --text:#e9e9f1;  --muted:#b8b8cf; --card:#121225; --line:#2a2a50;
+      --gradA:#667eea;    --gradB:#764ba2; --accent:#88ffdd; --accent2:#ffd166; --ok:#4ade80; --warn:#f59e0b;
+      --shadow: 0 20px 40px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji"; color:var(--text); background:radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%), var(--bg); line-height:1.65;}
+    a{color:inherit}
+      
+    .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(8px); background:rgba(11,11,18, .6); border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:14px 20px}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+    .logo i{background:linear-gradient(135deg,var(--gradA),var(--gradB)); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .nav ul{margin-left:auto;display:flex;gap:22px;list-style:none;padding:0}
+    .nav a{opacity:.9;text-decoration:none;font-weight:600}
+    .nav a:hover,.nav a:focus{opacity:1}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.75rem 1.1rem;border-radius:999px;border:1px solid rgba(255,255,255,.12);text-decoration:none;font-weight:700}
+    .btn.primary{background:linear-gradient(135deg,var(--gradA),var(--gradB));border:none}
+    .btn.ghost{background:transparent}
+    .theme-toggle{border:none;background:transparent;font-size:1.1rem;cursor:pointer}
+
+    .hero{position:relative;min-height:92vh;display:grid;place-items:center;padding:120px 20px 60px;overflow:hidden}
+    .grid-bg{position:absolute;inset:0;background:linear-gradient(transparent, rgba(102,126,234,.07)), radial-gradient(1200px 600px at 50% 100%, rgba(118,75,162,.12), transparent 60%); mask-image:radial-gradient( at 50% 50%, black 40%, transparent 75%)}
+    .hero-inner{max-width:1100px;margin:auto;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+    .title{font-size:clamp(2.2rem,5vw,4rem);line-height:1.05;margin:0 0 14px}
+    .title .grad{background:linear-gradient(135deg,var(--gradA),var(--gradB));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .subtitle{font-size:clamp(1rem,2.2vw,1.25rem);color:var(--muted)}
+    .badges{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 26px}
+    .chip{padding:.45rem .75rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-weight:600}
+    .cta{display:flex;gap:12px;flex-wrap:wrap}
+    .portrait{position:relative;isolation:isolate}
+    .portrait .frame{aspect-ratio:1/1;border-radius:24px; background:linear-gradient(135deg,rgba(102,126,234,.22),rgba(118,75,162,.22)); border:1px solid rgba(255,255,255,.08); box-shadow:var(--shadow); overflow:hidden}
+    .portrait img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.05)}
+    .floating{position:absolute;inset:auto -18px -18px auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px);padding:.7rem 1rem;border-radius:14px;font-weight:700}
+
+    .section{padding:80px 20px}
+    .container{max-width:1200px;margin:auto}
+    .section h2{font-size:clamp(1.6rem,3vw,2.2rem);margin:0 0 28px;background:linear-gradient(135deg,var(--gradA),var(--gradB));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+    .about{display:grid;grid-template-columns:1.1fr 1fr;gap:34px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:24px; box-shadow:var(--shadow)}
+    .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+    .stat{padding:16px;border-radius:14px;background:#0f0f1c;border:1px solid rgba(255,255,255,.06)}
+    .stat h3{margin:0;font-size:1.6rem}
+    .stat p{margin:6px 0 0;color:var(--muted);font-weight:600}
+
+    .skills{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .pillwrap{display:flex;flex-wrap:wrap;gap:8px}
+    .pill{padding:.4rem .7rem;border-radius:999px;background:rgba(102,126,234,.22);border:1px solid rgba(102,126,234,.25);font-weight:700}
+
+    .timeline{position:relative;padding-left:26px}
+    .timeline::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--gradA),transparent)}
+    .titem{position:relative;margin:0 0 20px}
+    .titem::marker{content:""}
+    .titem::before{content:"";position:absolute;left:-2px;top:.4rem;width:10px;height:10px;border-radius:50%;background:var(--gradA);box-shadow:0 0 0 3px rgba(102,126,234,.25)}
+    .trole{font-weight:800}
+    .tmeta{color:var(--muted);font-weight:600}
+
+    .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .proj{border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#0e0e1b;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+    .thumb{position:relative;aspect-ratio:16/9;display:grid;place-items:center;background:linear-gradient(135deg,var(--gradA),var(--gradB))}
+    .thumb i{font-size:44px;color:white;opacity:.95}
+    .pbody{padding:18px}
+    .pbody h3{margin:0 0 6px}
+    .pdesc{color:var(--muted)}
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+    .tag{background:#14142a;border:1px solid rgba(255,255,255,.08);padding:.35rem .6rem;border-radius:999px;font-weight:700}
+    .plinks{display:flex;gap:12px;margin-top:auto;padding:0 18px 18px}
+    .plinks a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:800}
+    .case{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:stretch}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .kpi{background:#0f0f1d;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px}
+    .kpi h4{margin:0 0 4px}
+    .testis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .quote{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:20px}
+    .quote p{margin:0 0 10px}
+    .contact{display:grid;grid-template-columns:1fr .9fr;gap:22px}
+    form{display:grid;gap:12px}
+    input,textarea{background:#0f0f1d;border:1px solid rgba(255,255,255,.08);color:var(--text);padding:12px 14px;border-radius:12px;font:inherit}
+    textarea{min-height:120px;resize:vertical}
+    .footer{padding:40px 20px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);text-align:center}
+    .muted{color:var(--muted)}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
+
+    @media (max-width: 980px){
+      .hero-inner{grid-template-columns:1fr;gap:24px}
+      .about,.case,.contact{grid-template-columns:1fr}
+      .skills{grid-template-columns:repeat(2,1fr)}
+      .projects{grid-template-columns:1fr 1fr}
+      .testis{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 640px){
+      .nav ul{display:none}
+      .projects,.skills,.testis{grid-template-columns:1fr}
+      .statgrid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      .reveal{opacity:1;transform:none!important}
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Sanithu Hulathduwage",
+    "url": "https://example.com/",
+    "image": "profile.jpg",
+    "jobTitle": "Founder, Software Engineer",
+    "sameAs": [
+      "https://www.linkedin.com/in/sanithu-hulathduwage/",
+      "https://github.com/Sanithu-99/",
+      "https://www.instagram.com/sanithu.official"
+    ]
+  }
+  </script>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">Sanithu Hulathduwage</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="mobile-menu">
-                <i class="fas fa-bars"></i>
-            </div>
-        </nav>
-    </header>
+  <header class="header" aria-label="Primary">
+    <nav class="nav">
+      <a class="logo" href="#home" aria-label="Go to home"><i class="fa-solid fa-bolt fa-lg"></i> <span>Sanithu</span></a>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="grid-2" style="gap:8px;align-items:center">
+        <a class="btn ghost" href="#resume"><i class="fa-solid fa-file-arrow-down"></i><span>Resume</span></a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fa-solid fa-circle-half-stroke"></i></button>
+      </div>
+    </nav>
+  </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Sanithu Hulathduwage</h1>
-            <p class="hero-subtitle">Turning Vision into Reality</p>
-            <div class="hero-roles">
-                <span class="role-tag">Founder</span>
-                <span class="role-tag">Software Engineer</span>
-                <span class="role-tag">Programmer</span>
-                <span class="role-tag">Graphic Designer</span>
-                <span class="role-tag">Visionary</span>
-                <span class="role-tag">Entrepreneur</span>
-            </div>
-            <div class="cta-buttons">
-                <a href="#projects" class="btn btn-primary">View My Work</a>
-                <a href="#contact" class="btn btn-secondary">Get In Touch</a>
-            </div>
+  <main id="home" class="hero">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <section>
+        <h1 class="title">Hi, I'm <span class="grad">Sanithu Hulathduwage</span>.</h1>
+        <p class="subtitle">Founder • Software Engineer • Designer. I build AI-powered products that turn vision into reality.</p>
+        <div class="badges" aria-label="Roles">
+          <span class="chip">Founder</span>
+          <span class="chip">Engineer</span>
+          <span class="chip">Product</span>
+          <span class="chip">Design</span>
+          <span class="chip">Automation</span>
         </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="section">
-        <h2 class="section-title">About Me</h2>
-        <div class="about-content">
-            <div class="about-image">
-                <img src="profile.jpg" alt="Sanithu Hulathduwage">
-            </div>
-            <div class="about-text">
-                <p>
-                    I'm a passionate entrepreneur and software engineer who believes in the power of technology to transform ideas into reality. With expertise spanning from founding companies to crafting elegant code and stunning designs, I bring a unique blend of technical prowess and visionary thinking to every project.
-                </p>
-                <p>
-                    My journey has taken me through various roles - from writing my first line of code to leading development teams, from designing user interfaces to building entire business ecosystems. I thrive on challenges that require both creative problem-solving and technical innovation.
-                </p>
-                <p>
-                    When I'm not coding or designing, you'll find me exploring emerging technologies, mentoring aspiring developers, or working on my next entrepreneurial venture. I believe that the intersection of technology and human creativity is where the most impactful solutions are born.
-                </p>
-            </div>
+        <div class="cta">
+          <a class="btn primary" href="#projects"><i class="fa-solid fa-rocket"></i> View Projects</a>
+          <a class="btn ghost" href="#contact"><i class="fa-solid fa-handshake-angle"></i> Collaborate</a>
         </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="section">
-        <h2 class="section-title">Skills & Expertise</h2>
-        <div class="skills-grid">
-            <div class="skill-category">
-                <h3><i class="fas fa-code"></i> Programming Languages</h3>
-                <div class="skills-list">
-                    <span class="skill-tag">JavaScript</span>
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">Java</span>
-                    <span class="skill-tag">C++</span>
-                    <span class="skill-tag">TypeScript</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3><i class="fas fa-globe"></i> Web Development</h3>
-                <div class="skills-list">
-                    <span class="skill-tag">React</span>
-                    <span class="skill-tag">Node.js</span>
-                    <span class="skill-tag">Express</span>
-                    <span class="skill-tag">Flask</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3><i class="fas fa-mobile-alt"></i> Mobile Development</h3>
-                <div class="skills-list">
-                    <span class="skill-tag">React Native</span>
-                    <span class="skill-tag">Flutter</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3><i class="fas fa-database"></i> Backend & Database</h3>
-                <div class="skills-list">
-                    <span class="skill-tag">MongoDB</span>
-                    <span class="skill-tag">PostgreSQL</span>
-                    <span class="skill-tag">MySQL</span>
-                    <span class="skill-tag">Redis</span>
-                    <span class="skill-tag">GraphQL</span>
-                    <span class="skill-tag">REST APIs</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3><i class="fas fa-cloud"></i> Cloud & DevOps</h3>
-                <div class="skills-list">
-                    <span class="skill-tag">AWS</span>
-                    <span class="skill-tag">Google Cloud</span>
-                    <span class="skill-tag">Docker</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3><i class="fas fa-paint-brush"></i> Design & Creative</h3>
-                <div class="skills-list">
-                    <span class="skill-tag">UI/UX Design</span>
-                    <span class="skill-tag">Adobe Creative Suite</span>
-                    <span class="skill-tag">Figma</span>
-                    <span class="skill-tag">Sketch</span>
-                    <span class="skill-tag">Branding</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-   <!-- Experience Section -->
-<section id="experience" class="section">
-    <h2 class="section-title">Professional Experience</h2>
-    <div class="experience-timeline">
-        
-        <div class="experience-item">
-            <div class="experience-content">
-                <div class="experience-date">2024</div>
-                <div class="experience-title">Graphic Designer</div>
-                <div class="experience-company">McCoy’s Roofing & Renovations</div>
-                <p>Designed business cards, a company logo, and a professional LinkedIn profile, significantly enhancing brand identity and driving increased client engagement.</p>
-            </div>
-        </div>
-
-        <div class="experience-item">
-            <div class="experience-content">
-                <div class="experience-date">2024</div>
-                <div class="experience-title">Graphic Designer</div>
-                <div class="experience-company">Empire Tax Services</div>
-                <p>Developed branded marketing materials and business cards that boosted brand visibility and contributed to higher event attendance.</p>
-            </div>
-        </div>
-
-        <div class="experience-item">
-            <div class="experience-content">
-                <div class="experience-date">2022 – 2023</div>
-                <div class="experience-title">IT Technician</div>
-                <div class="experience-company">Midwestern State University</div>
-                <p>Built and deployed 60+ computers, reducing downtime by 25%. Resolved 95% of technical issues on first contact and installed AV systems that improved event efficiency by 60%.</p>
-            </div>
-        </div>
-
-        <div class="experience-item">
-            <div class="experience-content">
-                <div class="experience-date">2021 – 2022</div>
-                <div class="experience-title">Technical Support & Media Coordinator</div>
-                <div class="experience-company">K Life Private Limited, Colombo, Sri Lanka</div>
-                <p>Improved equipment uptime by 10%, cutting maintenance costs. Managed social media platforms, leading to a 3% follower growth and an 18% increase in company profit.</p>
-            </div>
-        </div>
-
+      </section>
+      <aside class="portrait">
+        <div class="frame reveal"><img src="profile.jpg" alt="Portrait of Sanithu" loading="lazy"></div>
+        <div class="floating" aria-hidden="true">Currently: Building Velant.ai ⚡</div>
+      </aside>
     </div>
-</section>
+  </main>
 
-
-     <!-- Projects Section -->
-<section id="projects" class="section">
-    <h2 class="section-title">Featured Project</h2>
-    <div class="projects-grid">
-        <div class="project-card">
-            <div class="project-image">
-                <i class="fas fa-wallet"></i>
-            </div>
-            <div class="project-content">
-                <h3 class="project-title">Hum Cash – Personalized Finance App</h3>
-                <p class="project-description">
-                    Hum Cash is an AI-powered personal finance app that helps users manage budgets, track expenses, and set financial goals. It features real-time tracking, AES encryption, and smart financial insights tailored to individual behavior.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">Figma</span>
-                    <span class="tech-tag">React.js</span>
-                    <span class="tech-tag">MySQL</span>
-                    <span class="tech-tag">AES Encryption</span>
-                </div>
-                <div class="project-links">
-                    <a href="https://github.com/Sanithu-99/hum-cash" class="project-link" target="_blank">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                    <!-- Optional live demo link -->
-                    <!--
-                    <a href="https://your-live-demo-link.com" class="project-link" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Live Demo
-                    </a>
-                    -->
-                </div>
-            </div>
+  <section id="about" class="section">
+    <div class="container about">
+      <div class="card reveal">
+        <h2>About Me</h2>
+        <p>I’m a hands-on founder and software engineer obsessed with shipping. I blend product thinking, clean code, and sharp design to build experiences that feel inevitable. My toolkit spans React + TypeScript, Node/Nest, PostgreSQL, Auth0, Supabase, and cloud fundamentals — all wrapped in secure, scalable patterns.</p>
+        <p>Beyond code, I’ve led brand and growth initiatives for healthcare, dental, and local businesses — from SEO/SEM to analytics and conversion funnels. I believe every pixel and query should serve the outcome.</p>
+        <div class="statgrid">
+          <div class="stat"><h3>30K+</h3><p>Leads influenced</p></div>
+          <div class="stat"><h3>20+</h3><p>Products & sites shipped</p></div>
+          <div class="stat"><h3>99.9%</h3><p>Uptime targets</p></div>
+          <div class="stat"><h3>HIPAA</h3><p>Security mindset</p></div>
         </div>
+      </div>
+      <div class="card reveal">
+        <h2>Highlights</h2>
+        <ul class="timeline" role="list">
+          <li class="titem"><div class="trole">Founder & CEO — Velant.ai</div><div class="tmeta">2025 • Multi-tenant AI CRM for healthcare</div></li>
+          <li class="titem"><div class="trole">IT Technician — Midwestern State University</div><div class="tmeta">2022–2023 • 95% first-contact resolution</div></li>
+          <li class="titem"><div class="trole">Graphic Designer — McCoy’s, Empire Tax</div><div class="tmeta">2024 • Brand uplift & assets</div></li>
+        </ul>
+      </div>
     </div>
-</section>
-    <!-- Resume Section -->
-<section id="resume" class="contact section">
-    <h2 class="section-title">Download My Resume</h2>
-    <div class="contact-content">
-        <p style="font-size: 1.2rem; margin-bottom: 3rem;">
-            Interested in collaborating or learning more about my background? Download my resume below.
-        </p>
-        <a href="SANITHU_HULATHDUWAGE_RESUME.pdf" class="btn btn-primary" download style="font-size: 1.1rem; padding: 12px 35px;">
-            <i class="fas fa-download" style="margin-right: 8px;"></i> Download Resume (PDF)
-        </a>
-    </div>
-</section>
+  </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact section">
-        <h2 class="section-title">Let's Work Together</h2>
-        <div class="contact-content">
-            <p style="font-size: 1.2rem; margin-bottom: 3rem;">
-                Ready to bring your next project to life? I'm always excited to collaborate on innovative ideas and challenging problems.
-            </p>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>sanithu.hulathduwage@gmail.com</span>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <span>+1 (940) 782-3995</span>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Wichita Falls, Texas, USA</span>
-                </div>
-            </div>
-            <div class="social-links">
-                <a href="https://www.linkedin.com/in/sanithu-hulathduwage/" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/Sanithu-99/" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://www.instagram.com/sanithu.official?igsh=b2tkNTZya3Npbmp5&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
-            </div>
-            
+  <section id="skills" class="section">
+    <div class="container">
+      <h2>Skills & Expertise</h2>
+      <div class="skills">
+        <div class="card reveal">
+          <h3>Frontend</h3>
+          <div class="pillwrap">
+            <span class="pill">React</span><span class="pill">TypeScript</span><span class="pill">Chakra UI</span><span class="pill">Tailwind</span><span class="pill">Vite/Next</span>
+          </div>
+        </div>
+        <div class="card reveal">
+          <h3>Backend</h3>
+          <div class="pillwrap">
+            <span class="pill">Node / NestJS</span><span class="pill">PostgreSQL</span><span class="pill">Supabase</span><span class="pill">Redis</span><span class="pill">Auth0</span>
+          </div>
+        </div>
+        <div class="card reveal">
+          <h3>Cloud & Data</h3>
+          <div class="pillwrap">
+            <span class="pill">AWS & GCP</span><span class="pill">Docker</span><span class="pill">Analytics</span><span class="pill">RLS & Encryption</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="section">
+    <div class="container">
+      <h2>Professional Experience</h2>
+      <div class="grid-2">
+        <div class="card reveal">
+          <h3 class="trole">Graphic Designer</h3>
+          <p class="tmeta">McCoy’s Roofing & Renovations • 2024</p>
+          <p>Designed brand system, cards, and LinkedIn presence — driving client engagement.</p>
+        </div>
+        <div class="card reveal">
+          <h3 class="trole">Graphic Designer</h3>
+          <p class="tmeta">Empire Tax Services • 2024</p>
+          <p>Produced cohesive marketing assets that boosted visibility and event turnout.</p>
+        </div>
+        <div class="card reveal">
+          <h3 class="trole">IT Technician</h3>
+          <p class="tmeta">Midwestern State University • 2022–2023</p>
+          <p>Deployed 60+ systems, achieved 95% first-contact fix rate, and modernized AV setups.</p>
+        </div>
+        <div class="card reveal">
+          <h3 class="trole">Technical Support & Media Coordinator</h3>
+          <p class="tmeta">K Life Pvt Ltd • 2021–2022</p>
+          <p>Improved uptime and drove measurable growth across owned social channels.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <div class="container">
+      <h2>Featured Projects</h2>
+      <div class="projects">
+        <article class="proj reveal">
+          <div class="thumb"><i class="fa-solid fa-wallet"></i></div>
+          <div class="pbody">
+            <h3>Hum Cash — Personalized Finance App</h3>
+            <p class="pdesc">AI-powered budgeting, real-time tracking, and AES-encrypted vault for personal finance insights.</p>
+            <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">React</span><span class="tag">MySQL</span><span class="tag">AES</span></div>
+          </div>
+          <div class="plinks">
+            <a href="https://github.com/Sanithu-99/hum-cash" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Code</a>
+          </div>
+        </article>
+        <article class="proj reveal">
+          <div class="thumb"><i class="fa-solid fa-robot"></i></div>
+          <div class="pbody">
+            <h3>Velant.ai — AI CRM (WIP)</h3>
+            <p class="pdesc">Multi-tenant CRM for healthcare with Auth0, Supabase, role-based dashboards, and live lead streams.</p>
+            <div class="tags"><span class="tag">React</span><span class="tag">NestJS</span><span class="tag">Postgres</span><span class="tag">Auth0</span><span class="tag">Supabase</span></div>
+          </div>
+          <div class="plinks">
+            <a href="#" aria-disabled="true" title="Private repo"><i class="fa-solid fa-lock"></i> Private</a>
+          </div>
+        </article>
+        <article class="proj reveal">
+          <div class="thumb"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+          <div class="pbody">
+            <h3>SEO Revamps — Healthcare & Dental</h3>
+            <p class="pdesc">High-converting pages, schema, Core Web Vitals, and analytics pipelines across multiple brands.</p>
+            <div class="tags"><span class="tag">Next.js</span><span class="tag">Yoast/Schema</span><span class="tag">GTM/GAds</span></div>
+          </div>
+          <div class="plinks">
+            <a href="#contact"><i class="fa-solid fa-arrow-up-right-from-square"></i> Case study on request</a>
+          </div>
+        </article>
+      </div>
+      <div class="case section" style="padding:0;margin-top:26px">
+        <div class="card reveal">
+          <h3>Case Study: Detox Center Funnel</h3>
+          <p>Redesigned landing system with outcome-first messaging. Introduced analytics tagging, call tracking, and iterative CRO.</p>
+          <div class="kpis">
+            <div class="kpi"><h4>+42%</h4><p class="muted">Lead conversion</p></div>
+            <div class="kpi"><h4>-28%</h4><p class="muted">CPC reduction</p></div>
+            <div class="kpi"><h4>+2.1×</h4><p class="muted">ROAS</p></div>
+          </div>
+        </div>
+        <div class="card reveal">
+          <h3>What I Shipped</h3>
+          <ul class="muted" style="margin:0 0 10px 18px">
+            <li>Fast, SEO-first pages (CWV green)</li>
+            <li>HIPAA-conscious data flow</li>
+            <li>GTM + GAds + Meta measurement</li>
+            <li>Experiment cadence & dashboards</li>
+          </ul>
+          <a class="btn primary" href="#contact"><i class="fa-solid fa-comments"></i> Request full write‑up</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="testimonials">
+    <div class="container">
+      <h2>Kind Words</h2>
+      <div class="testis">
+        <blockquote class="quote reveal"><p>“Sanithu moves ideas into production fast — with taste.”</p><span class="muted">— Product Lead, Healthtech</span></blockquote>
+        <blockquote class="quote reveal"><p>“He thinks in systems. Our ops finally make sense.”</p><span class="muted">— COO, Recovery</span></blockquote>
+        <blockquote class="quote reveal"><p>“Design, code, growth — rare to find all three.”</p><span class="muted">— Founder, SaaS</span></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section id="resume" class="section">
+    <div class="container">
+      <h2>Download My Resume</h2>
+      <p class="muted">Prefer the quick version? Grab the PDF — then let’s talk specifics.</p>
+      <a class="btn primary" href="SANITHU_HULATHDUWAGE_RESUME.pdf" download><i class="fa-solid fa-download"></i> Download Resume (PDF)</a>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="container contact">
+      <div class="card reveal">
+        <h2>Let’s Work Together</h2>
+        <p class="muted">Have something ambitious in mind — AI, CRM, or growth? I’ll help you ship it.</p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px">
+          <a class="btn ghost" href="mailto:sanithu.hulathduwage@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
+          <a class="btn ghost" href="tel:+19407823995"><i class="fa-solid fa-phone"></i> Call</a>
+          <a class="btn ghost" target="_blank" rel="noopener" href="https://www.linkedin.com/in/sanithu-hulathduwage/"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+          <a class="btn ghost" target="_blank" rel="noopener" href="https://github.com/Sanithu-99/"><i class="fa-brands fa-github"></i> GitHub</a>
+          <a class="btn ghost" target="_blank" rel="noopener" href="https://www.instagram.com/sanithu.official"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        </div>
+      </div>
+      <div class="card reveal">
+        <h2>Send a Message</h2>
+        <form id="contactForm" novalidate>
+          <label class="sr-only" for="name">Name</label>
+          <input id="name" name="name" placeholder="Your name" required>
+          <label class="sr-only" for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="Email" required>
+          <label class="sr-only" for="message">Message</label>
+          <textarea id="message" name="message" placeholder="What are we building?" required></textarea>
+          <button class="btn primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          <p id="formStatus" class="muted" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Sanithu Hulathduwage. Crafted with care.</p>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const applyTheme = (mode) => {
+      if(mode === 'light'){
+        document.documentElement.style.setProperty('--bg', '#f7f8fc');
+        document.documentElement.style.setProperty('--text', '#1a1a1f');
+        document.documentElement.style.setProperty('--muted', '#56566a');
+        document.documentElement.style.setProperty('--card', '#ffffff');
+        document.body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.18), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.18), transparent 60%), #f7f8fc';
+      } else {
+        document.documentElement.style.setProperty('--bg', '#0b0b12');
+        document.documentElement.style.setProperty('--text', '#e9e9f1');
+        document.documentElement.style.setProperty('--muted', '#b8b8cf');
+        document.documentElement.style.setProperty('--card', '#121225');
+        document.body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%), #0b0b12';
+      }
+    }
+    const saved = localStorage.getItem('theme');
+    if(saved) applyTheme(saved);
+    themeToggle.addEventListener('click', ()=>{
+      const current = localStorage.getItem('theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', next); applyTheme(next);
+    });
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!prefersReduced){
+      const obs = new IntersectionObserver((entries)=>{
+        for(const e of entries){
+          if(e.isIntersecting){
+            e.target.animate([
+              {opacity:0, transform:'translateY(16px)'},
+              {opacity:1, transform:'translateY(0)'}
+            ], {duration:600, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards'});
+            obs.unobserve(e.target);
+          }
+        }
+      }, {threshold:.12});
+      document.querySelectorAll('.reveal, .proj, .card, .quote').forEach(el=>obs.observe(el));
+    }
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+      const status = document.getElementById('formStatus');
+      if(!name || !email || !message){ status.textContent = 'Please fill out all fields.'; return; }
+      const mailto = `mailto:sanithu.hulathduwage@gmail.com?subject=${encodeURIComponent('Portfolio inquiry from '+name)}&body=${encodeURIComponent(message+"\n\n— "+name+" ("+email+")")}`;
+      window.location.href = mailto;
+      status.textContent = 'Opening your email client…';
+      form.reset();
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
