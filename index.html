@@ -17,27 +17,36 @@
 
   <style>
     :root{
-      --bg: #0b0b12;      --text:#e9e9f1;  --muted:#b8b8cf; --card:#121225; --line:#2a2a50;
-      --gradA:#667eea;    --gradB:#764ba2; --accent:#88ffdd; --accent2:#ffd166; --ok:#4ade80; --warn:#f59e0b;
-      --shadow: 0 20px 40px rgba(0,0,0,.35);
+      --bg:#0b0b12; --text:#e9e9f1; --muted:#b8b8cf; --card:#121225; --line:#2a2a50;
+      --gradA:#667eea; --gradB:#764ba2; --accent:#88ffdd; --accent2:#ffd166; --ok:#4ade80; --warn:#f59e0b;
+      --shadow:0 20px 40px rgba(0,0,0,.35);
+      /* header tokens (theme-controlled) */
+      --header-bg: rgba(11,11,18,.35);
+      --header-border: rgba(255,255,255,.06);
+      --header-bg-solid: rgba(11,11,18,.65);
+      --header-border-strong: rgba(255,255,255,.14);
+      --icon: #ffffff; /* dark mode icon should be white */
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{margin:0;font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji"; color:var(--text); background:radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%), var(--bg); line-height:1.65;}
     a{color:inherit}
-      
-    .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(8px); background:rgba(11,11,18, .6); border-bottom:1px solid rgba(255,255,255,.06)}
-    .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:14px 20px}
+
+    /* Header */
+    .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(10px); background:var(--header-bg); border-bottom:1px solid var(--header-border); transition:background .25s ease,border-color .25s ease}
+    .header[data-scrolled="true"]{background:var(--header-bg-solid); border-bottom-color:var(--header-border-strong)}
+    .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
     .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
     .logo i{background:linear-gradient(135deg,var(--gradA),var(--gradB)); -webkit-background-clip:text; background-clip:text; color:transparent}
     .nav ul{margin-left:auto;display:flex;gap:22px;list-style:none;padding:0}
     .nav a{opacity:.9;text-decoration:none;font-weight:600}
     .nav a:hover,.nav a:focus{opacity:1}
-    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.75rem 1.1rem;border-radius:999px;border:1px solid rgba(255,255,255,.12);text-decoration:none;font-weight:700}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.6rem 1rem;border-radius:999px;border:1px solid rgba(255,255,255,.12);text-decoration:none;font-weight:700}
     .btn.primary{background:linear-gradient(135deg,var(--gradA),var(--gradB));border:none}
     .btn.ghost{background:transparent}
-    .theme-toggle{border:none;background:transparent;font-size:1.1rem;cursor:pointer}
+    .theme-toggle{border:none;background:transparent;font-size:1.1rem;cursor:pointer;color:var(--icon)}
 
+    /* Hero */
     .hero{position:relative;min-height:92vh;display:grid;place-items:center;padding:120px 20px 60px;overflow:hidden}
     .grid-bg{position:absolute;inset:0;background:linear-gradient(transparent, rgba(102,126,234,.07)), radial-gradient(1200px 600px at 50% 100%, rgba(118,75,162,.12), transparent 60%); mask-image:radial-gradient( at 50% 50%, black 40%, transparent 75%)}
     .hero-inner{max-width:1100px;margin:auto;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
@@ -52,6 +61,7 @@
     .portrait img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.05)}
     .floating{position:absolute;inset:auto -18px -18px auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px);padding:.7rem 1rem;border-radius:14px;font-weight:700}
 
+    /* Sections */
     .section{padding:80px 20px}
     .container{max-width:1200px;margin:auto}
     .section h2{font-size:clamp(1.6rem,3vw,2.2rem);margin:0 0 28px;background:linear-gradient(135deg,var(--gradA),var(--gradB));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -136,7 +146,7 @@
   </script>
 </head>
 <body>
-  <header class="header" aria-label="Primary">
+  <header class="header" aria-label="Primary" id="siteHeader">
     <nav class="nav">
       <a class="logo" href="#home" aria-label="Go to home"><i class="fa-solid fa-bolt fa-lg"></i> <span>Sanithu</span></a>
       <ul>
@@ -347,30 +357,62 @@
   </footer>
 
   <script>
+    // Theme logic with header + icon colors
     const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const body = document.body;
+
     const applyTheme = (mode) => {
       if(mode === 'light'){
-        document.documentElement.style.setProperty('--bg', '#f7f8fc');
-        document.documentElement.style.setProperty('--text', '#1a1a1f');
-        document.documentElement.style.setProperty('--muted', '#56566a');
-        document.documentElement.style.setProperty('--card', '#ffffff');
-        document.body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.18), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.18), transparent 60%), #f7f8fc';
+        root.style.setProperty('--bg', '#f7f8fc');
+        root.style.setProperty('--text', '#1a1a1f');
+        root.style.setProperty('--muted', '#56566a');
+        root.style.setProperty('--card', '#ffffff');
+        // Header: extra transparent and airy in light
+        root.style.setProperty('--header-bg', 'rgba(255,255,255,.35)');
+        root.style.setProperty('--header-border', 'rgba(0,0,0,.06)');
+        root.style.setProperty('--header-bg-solid', 'rgba(255,255,255,.72)');
+        root.style.setProperty('--header-border-strong', 'rgba(0,0,0,.12)');
+        // Icon should be dark in light mode
+        root.style.setProperty('--icon', '#1a1a1f');
+        body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.18), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.18), transparent 60%), #f7f8fc';
+        localStorage.setItem('theme','light');
       } else {
-        document.documentElement.style.setProperty('--bg', '#0b0b12');
-        document.documentElement.style.setProperty('--text', '#e9e9f1');
-        document.documentElement.style.setProperty('--muted', '#b8b8cf');
-        document.documentElement.style.setProperty('--card', '#121225');
-        document.body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%), #0b0b12';
+        root.style.setProperty('--bg', '#0b0b12');
+        root.style.setProperty('--text', '#e9e9f1');
+        root.style.setProperty('--muted', '#b8b8cf');
+        root.style.setProperty('--card', '#121225');
+        // Header: even more transparent in dark, then firm up on scroll
+        root.style.setProperty('--header-bg', 'rgba(11,11,18,.35)');
+        root.style.setProperty('--header-border', 'rgba(255,255,255,.06)');
+        root.style.setProperty('--header-bg-solid', 'rgba(11,11,18,.65)');
+        root.style.setProperty('--header-border-strong', 'rgba(255,255,255,.14)');
+        // Icon must be white in dark mode
+        root.style.setProperty('--icon', '#ffffff');
+        body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%), #0b0b12';
+        localStorage.setItem('theme','dark');
       }
     }
+
     const saved = localStorage.getItem('theme');
-    if(saved) applyTheme(saved);
+    applyTheme(saved || 'dark');
+
     themeToggle.addEventListener('click', ()=>{
       const current = localStorage.getItem('theme') || 'dark';
       const next = current === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('theme', next); applyTheme(next);
+      applyTheme(next);
     });
 
+    // Header transparency strengthens on scroll for readability
+    const header = document.getElementById('siteHeader');
+    const setScrolled = () => {
+      const scrolled = window.scrollY > 8;
+      header.setAttribute('data-scrolled', scrolled ? 'true' : 'false');
+    }
+    setScrolled();
+    window.addEventListener('scroll', setScrolled, {passive:true});
+
+    // Reveal on scroll (respect reduced motion)
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!prefersReduced){
       const obs = new IntersectionObserver((entries)=>{
@@ -386,6 +428,8 @@
       }, {threshold:.12});
       document.querySelectorAll('.reveal, .proj, .card, .quote').forEach(el=>obs.observe(el));
     }
+
+    // Simple contact form (mailto fallback)
     const form = document.getElementById('contactForm');
     form.addEventListener('submit', (e)=>{
       e.preventDefault();
@@ -394,11 +438,15 @@
       const message = form.message.value.trim();
       const status = document.getElementById('formStatus');
       if(!name || !email || !message){ status.textContent = 'Please fill out all fields.'; return; }
-      const mailto = `mailto:sanithu.hulathduwage@gmail.com?subject=${encodeURIComponent('Portfolio inquiry from '+name)}&body=${encodeURIComponent(message+"\n\n— "+name+" ("+email+")")}`;
+      const mailto = `mailto:sanithu.hulathduwage@gmail.com?subject=${encodeURIComponent('Portfolio inquiry from '+name)}&body=${encodeURIComponent(message+"
+
+— "+name+" ("+email+")")}`;
       window.location.href = mailto;
       status.textContent = 'Opening your email client…';
       form.reset();
     });
+
+    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
