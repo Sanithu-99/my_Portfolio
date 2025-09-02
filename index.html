@@ -193,11 +193,12 @@
       <div class="card reveal">
         <h2>About Me</h2>
         <p>I’m a hands-on founder and software engineer obsessed with shipping. I blend product thinking, clean code, and sharp design to build experiences that feel inevitable. My toolkit spans React + TypeScript, Node/Nest, PostgreSQL, Auth0, Supabase, and cloud fundamentals — all wrapped in secure, scalable patterns.</p>
-        <p>Beyond coding, I design various things as a Graphic Designer and help business grow using my Personal expertise on Strategies and business planning.</p>
+        <p>Beyond code, I’ve led brand and growth initiatives for healthcare, dental, and local businesses — from SEO/SEM to analytics and conversion funnels. I believe every pixel and query should serve the outcome.</p>
         <div class="statgrid">
-          <div class="stat">><p>Business influenced</p></div>
-          <div class="stat"><p>Products & sites shipped</p></div>
-          <div class="stat"><p>Uptime targets</p></div>
+          <div class="stat"><h3>30K+</h3><p>Leads influenced</p></div>
+          <div class="stat"><h3>20+</h3><p>Products & sites shipped</p></div>
+          <div class="stat"><h3>99.9%</h3><p>Uptime targets</p></div>
+          <div class="stat"><h3>HIPAA</h3><p>Security mindset</p></div>
         </div>
       </div>
       <div class="card reveal">
@@ -241,11 +242,6 @@
     <div class="container">
       <h2>Professional Experience</h2>
       <div class="grid-2">
-        <div class="card reveal">
-          <h3 class="trole">CS Tutor</h3>
-          <p class="tmeta">Midwestern State University • 2025</p>
-          <p>Currently Serving as a CS Tutor at MSU Texas teaching Computer Science to Students.</p>
-        </div>
         <div class="card reveal">
           <h3 class="trole">Graphic Designer</h3>
           <p class="tmeta">McCoy’s Roofing & Renovations • 2024</p>
@@ -442,12 +438,10 @@
       const message = form.message.value.trim();
       const status = document.getElementById('formStatus');
       if(!name || !email || !message){ status.textContent = 'Please fill out all fields.'; return; }
-      const mailto = `mailto:sanithu.hulathduwage@gmail.com?subject=${encodeURIComponent('Portfolio inquiry from '+name)}&body=${encodeURIComponent(message+"
+      const mailto = `mailto:sanithu.hulathduwage@gmail.com?subject=${encodeURIComponent('Portfolio inquiry from ' + name)}&body=${encodeURIComponent(message + "
 
-— "+name+" ("+email+")")}`;
+— " + name + " (" + email + ")")}`;
       window.location.href = mailto;
-      status.textContent = 'Opening your email client…';
-      form.reset();
     });
 
     // Year
