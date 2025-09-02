@@ -22,14 +22,13 @@
       --text:#e9e9f1; 
       --muted:#b8b8cf;
 
-      /* surfaces & borders (use these everywhere) */
-      --surface-1:#121225;       /* cards, stats, kpis, panels */
-      --surface-2:#0f0f1d;       /* inputs, tags, subtle blocks */
-      --surface-3:#14142a;       /* pills, accents */
+      /* surfaces & borders */
+      --surface-1:#121225; 
+      --surface-2:#0f0f1d; 
+      --surface-3:#14142a; 
       --border:rgba(255,255,255,.08);
-      --line:#2a2a50;
 
-      /* header tokens (theme-controlled) */
+      /* header */
       --header-bg: rgba(11,11,18,.35);
       --header-border: rgba(255,255,255,.06);
       --header-bg-solid: rgba(11,11,18,.65);
@@ -41,10 +40,16 @@
       --gradB:#764ba2; 
       --accent:#88ffdd; 
       --accent2:#ffd166; 
-      --ok:#4ade80; 
-      --warn:#f59e0b;
 
       --shadow:0 20px 40px rgba(0,0,0,.35);
+
+      /* motion tokens */
+      --dur-1: 220ms;
+      --dur-2: 420ms;
+      --dur-3: 900ms;
+      --ease-1: cubic-bezier(.2,.8,.2,1);
+      --ease-2: cubic-bezier(.16,1,.3,1);
+      --ease-spring: cubic-bezier(.2, .65, .2, 1.2);
     }
 
     *{box-sizing:border-box}
@@ -58,37 +63,99 @@
         radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%),
         var(--bg);
       line-height:1.65;
+      /* global fade-in */
+      view-transition-name: page;
     }
-    a{color:inherit}
+    a{color:inherit; text-decoration: none}
+
+    /* smooth theming across key elements */
+    .themed,
+    body,
+    .header,
+    .card,
+    .stat,
+    .proj,
+    .tag,
+    .chip,
+    input, textarea,
+    .btn,
+    .kpi,
+    .quote {
+      transition:
+        background-color var(--dur-2) var(--ease-1),
+        color var(--dur-2) var(--ease-1),
+        border-color var(--dur-2) var(--ease-1),
+        box-shadow var(--dur-1) var(--ease-1),
+        transform var(--dur-1) var(--ease-1);
+    }
 
     /* Header */
-    .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(10px); background:var(--header-bg); border-bottom:1px solid var(--header-border); transition:background .25s ease,border-color .25s ease}
+    .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(10px); background:var(--header-bg); border-bottom:1px solid var(--header-border); transition:background var(--dur-1) var(--ease-1),border-color var(--dur-1) var(--ease-1)}
     .header[data-scrolled="true"]{background:var(--header-bg-solid); border-bottom-color:var(--header-border-strong)}
     .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
     .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
-    .logo i{background:linear-gradient(135deg,var(--gradA),var(--gradB)); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .logo i{background:linear-gradient(135deg,var(--gradA),var(--gradB)); -webkit-background-clip:text; background-clip:text; color:transparent;
+      animation: logoPulse var(--dur-3) var(--ease-2) infinite alternate;
+    }
+    @keyframes logoPulse {
+      from { filter: drop-shadow(0 0 0 rgba(102,126,234,0)); transform: translateY(0) }
+      to   { filter: drop-shadow(0 6px 16px rgba(102,126,234,.25)); transform: translateY(-1px) }
+    }
+
     .nav ul{margin-left:auto;display:flex;gap:22px;list-style:none;padding:0}
-    .nav a{opacity:.9;text-decoration:none;font-weight:600}
+    .nav a{opacity:.85;text-decoration:none;font-weight:600; position:relative}
+    .nav a::after{
+      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background: linear-gradient(90deg,var(--gradA),var(--gradB));
+      transform: scaleX(0); transform-origin:left; transition: transform var(--dur-1) var(--ease-1);
+    }
     .nav a:hover,.nav a:focus{opacity:1}
-    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.6rem 1rem;border-radius:999px;border:1px solid var(--border);text-decoration:none;font-weight:700;background:transparent}
-    .btn.primary{background:linear-gradient(135deg,var(--gradA),var(--gradB));border:none}
-    .btn.ghost{background:transparent}
+    .nav a:hover::after,.nav a:focus::after{ transform: scaleX(1) }
+
+    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.65rem 1.05rem;border-radius:999px;border:1px solid var(--border);font-weight:700;background:transparent;will-change: transform, box-shadow}
+    .btn.primary{background:linear-gradient(135deg,var(--gradA),var(--gradB));border:none;color:white}
+    .btn:hover{transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.25)}
+    .btn:active{transform: translateY(0)}
+    .btn:focus-visible{outline: 2px solid var(--accent); outline-offset: 2px}
     .theme-toggle{border:none;background:transparent;font-size:1.1rem;cursor:pointer;color:var(--icon)}
+    .theme-toggle:hover{transform: rotate(-8deg) scale(1.04)}
 
     /* Hero */
     .hero{position:relative;min-height:92vh;display:grid;place-items:center;padding:120px 20px 60px;overflow:hidden}
-    .grid-bg{position:absolute;inset:0;background:linear-gradient(transparent, rgba(102,126,234,.07)), radial-gradient(1200px 600px at 50% 100%, rgba(118,75,162,.12), transparent 60%); mask-image:radial-gradient( at 50% 50%, black 40%, transparent 75%)}
+    .grid-bg{
+      position:absolute;inset:-10%;
+      background:
+        radial-gradient(60% 40% at var(--mx,50%) var(--my,50%), rgba(118,75,162,.18), transparent 60%),
+        radial-gradient(40% 30% at calc(100% - var(--mx,50%)) 20%, rgba(102,126,234,.18), transparent 60%);
+      mask-image:radial-gradient( at 50% 50%, black 40%, transparent 75%);
+      transition: transform var(--dur-3) var(--ease-1);
+    }
     .hero-inner{max-width:1100px;margin:auto;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
     .title{font-size:clamp(2.2rem,5vw,4rem);line-height:1.05;margin:0 0 14px}
-    .title .grad{background:linear-gradient(135deg,var(--gradA),var(--gradB));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .title .grad{
+      background:linear-gradient(120deg,var(--gradA),var(--gradB),var(--gradA));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      background-size: 200% 200%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 0% 50% }
+      50%{ background-position: 100% 50% }
+      100%{ background-position: 0% 50% }
+    }
     .subtitle{font-size:clamp(1rem,2.2vw,1.25rem);color:var(--muted)}
     .badges{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 26px}
-    .chip{padding:.45rem .75rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--border);font-weight:600}
-    .cta{display:flex;gap:12px;flex-wrap:wrap}
-    .portrait{position:relative;isolation:isolate}
-    .portrait .frame{aspect-ratio:1/1;border-radius:24px; background:linear-gradient(135deg,rgba(102,126,234,.22),rgba(118,75,162,.22)); border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden}
+    .chip{padding:.45rem .75rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--border);font-weight:600; backdrop-filter: blur(6px)}
+    .chip:hover{transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,0,0,.25)}
+
+    .portrait{position:relative;isolation:isolate;perspective: 1000px}
+    .portrait .frame{
+      aspect-ratio:1/1;border-radius:24px; background:linear-gradient(135deg,rgba(102,126,234,.22),rgba(118,75,162,.22));
+      border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden;
+      transform: rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg)); transform-style: preserve-3d; transition: transform var(--dur-1) var(--ease-1);
+    }
     .portrait img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.05)}
-    .floating{position:absolute;inset:auto -18px -18px auto;background:rgba(255,255,255,.06);border:1px solid var(--border);backdrop-filter:blur(8px);padding:.7rem 1rem;border-radius:14px;font-weight:700}
+    .floating{position:absolute;inset:auto -18px -18px auto;background:rgba(255,255,255,.06);border:1px solid var(--border);backdrop-filter:blur(8px);padding:.7rem 1rem;border-radius:14px;font-weight:700; transform: translateZ(30px)}
 
     /* Sections */
     .section{padding:80px 20px}
@@ -97,15 +164,19 @@
 
     .about{display:grid;grid-template-columns:1.1fr 1fr;gap:34px}
     .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:18px; padding:24px; box-shadow:var(--shadow)}
+    .card:hover{transform: translateY(-4px)}
+    .card[data-reveal]{opacity:0; transform: translateY(16px);}
 
     .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
     .stat{padding:16px;border-radius:14px;background:var(--surface-1);border:1px solid var(--border)}
+    .stat:hover{transform: translateY(-2px)}
     .stat h3{margin:0;font-size:1.6rem}
     .stat p{margin:6px 0 0;color:var(--muted);font-weight:600}
 
     .skills{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .pillwrap{display:flex;flex-wrap:wrap;gap:8px}
     .pill{padding:.4rem .7rem;border-radius:999px;background:rgba(102,126,234,.22);border:1px solid rgba(102,126,234,.25);font-weight:700}
+    .pill:hover{transform: translateY(-1px)}
 
     .timeline{position:relative;padding-left:26px}
     .timeline::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--gradA),transparent)}
@@ -116,16 +187,26 @@
     .tmeta{color:var(--muted);font-weight:600}
 
     .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .proj{border-radius:18px;overflow:hidden;border:1px solid var(--border);background:var(--surface-1);display:flex;flex-direction:column;box-shadow:var(--shadow)}
+    .proj{border-radius:18px;overflow:hidden;border:1px solid var(--border);background:var(--surface-1);display:flex;flex-direction:column;box-shadow:var(--shadow); transform: translateZ(0)}
+    .proj:hover{transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,.35)}
     .thumb{position:relative;aspect-ratio:16/9;display:grid;place-items:center;background:linear-gradient(135deg,var(--gradA),var(--gradB))}
+    .thumb::after{
+      content:""; position:absolute; inset:0;
+      background: radial-gradient(60% 60% at 50% 40%, rgba(255,255,255,.15), transparent 60%);
+      mix-blend-mode: screen; opacity:.65; transition: opacity var(--dur-1) var(--ease-1)
+    }
+    .proj:hover .thumb::after{opacity:.9}
     .thumb i{font-size:44px;color:white;opacity:.95}
     .pbody{padding:18px}
     .pbody h3{margin:0 0 6px}
     .pdesc{color:var(--muted)}
     .tags{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
     .tag{background:var(--surface-2);border:1px solid var(--border);padding:.35rem .6rem;border-radius:999px;font-weight:700}
+
     .plinks{display:flex;gap:12px;margin-top:auto;padding:0 18px 18px}
-    .plinks a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:800}
+    .plinks a{display:inline-flex;align-items:center;gap:8px;font-weight:800}
+    .plinks a:hover{transform: translateY(-2px)}
+
     .case{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:stretch}
     .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     .kpi{background:var(--surface-1);padding:14px;border:1px solid var(--border);border-radius:14px}
@@ -133,11 +214,11 @@
 
     .testis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .quote{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:18px; padding:20px}
-    .quote p{margin:0 0 10px}
 
     .contact{display:grid;grid-template-columns:1fr .9fr;gap:22px}
     form{display:grid;gap:12px}
     input,textarea{background:var(--surface-2);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:12px;font:inherit}
+    input:focus, textarea:focus{outline:2px solid var(--accent); outline-offset: 2px}
     textarea{min-height:120px;resize:vertical}
 
     .footer{padding:40px 20px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);text-align:center}
@@ -157,9 +238,21 @@
       .projects,.skills,.testis{grid-template-columns:1fr}
       .statgrid{grid-template-columns:repeat(2,1fr)}
     }
+
+    /* View Transitions: soften theme switch */
+    ::view-transition-old(page),
+    ::view-transition-new(page){
+      animation-duration: var(--dur-2);
+      animation-timing-function: var(--ease-2);
+    }
+
+    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
       html{scroll-behavior:auto}
-      .reveal{opacity:1;transform:none!important}
+      .reveal,[data-reveal]{opacity:1 !important; transform:none !important; animation:none !important}
+      .grid-bg,.portrait .frame,.btn,.proj,.card,.chip,.pill{transition:none !important}
+      ::view-transition-old(page),
+      ::view-transition-new(page){animation: none !important}
     }
   </style>
 
@@ -180,8 +273,8 @@
   }
   </script>
 </head>
-<body>
-  <header class="header" aria-label="Primary" id="siteHeader">
+<body class="themed">
+  <header class="header themed" aria-label="Primary" id="siteHeader">
     <nav class="nav">
       <a class="logo" href="#home" aria-label="Go to home"><i class="fa-solid fa-bolt fa-lg"></i> <span>Sanithu</span></a>
       <ul>
@@ -192,32 +285,32 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
       <div class="grid-2" style="gap:8px;align-items:center">
-        <a class="btn ghost" href="#resume"><i class="fa-solid fa-file-arrow-down"></i><span>Resume</span></a>
+        <a class="btn ghost themed" href="#resume"><i class="fa-solid fa-file-arrow-down"></i><span>Resume</span></a>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fa-solid fa-circle-half-stroke"></i></button>
       </div>
     </nav>
   </header>
 
-  <main id="home" class="hero">
+  <main id="home" class="hero themed">
     <div class="grid-bg" aria-hidden="true"></div>
     <div class="hero-inner">
       <section>
         <h1 class="title">Hi, I'm <span class="grad">Sanithu Hulathduwage</span>.</h1>
         <p class="subtitle">Founder • Software Engineer • Designer. I build AI-powered products that turn vision into reality.</p>
         <div class="badges" aria-label="Roles">
-          <span class="chip">Founder</span>
-          <span class="chip">Engineer</span>
-          <span class="chip">Product</span>
-          <span class="chip">Design</span>
-          <span class="chip">Automation</span>
+          <span class="chip themed">Founder</span>
+          <span class="chip themed">Engineer</span>
+          <span class="chip themed">Product</span>
+          <span class="chip themed">Design</span>
+          <span class="chip themed">Automation</span>
         </div>
         <div class="cta">
           <a class="btn primary" href="#projects"><i class="fa-solid fa-rocket"></i> View Projects</a>
-          <a class="btn ghost" href="#contact"><i class="fa-solid fa-handshake-angle"></i> Collaborate</a>
+          <a class="btn ghost themed" href="#contact"><i class="fa-solid fa-handshake-angle"></i> Collaborate</a>
         </div>
       </section>
       <aside class="portrait">
-        <div class="frame reveal"><img src="profile.jpg" alt="Portrait of Sanithu" loading="lazy"></div>
+        <div class="frame"><img src="profile.jpg" alt="Portrait of Sanithu" loading="lazy"></div>
         <div class="floating" aria-hidden="true">Currently: Building an AI System⚡</div>
       </aside>
     </div>
@@ -225,23 +318,23 @@
 
   <section id="about" class="section">
     <div class="container about">
-      <div class="card reveal">
+      <div class="card themed" data-reveal>
         <h2>About Me</h2>
         <p>I’m a hands-on founder and software engineer obsessed with shipping. I blend product thinking, clean code, and sharp design to build experiences that feel inevitable. My toolkit spans React + TypeScript, Node/Nest, PostgreSQL, Auth0, Supabase, and cloud fundamentals — all wrapped in secure, scalable patterns.</p>
         <p>Beyond code, I’ve led brand and growth initiatives for healthcare, dental, and local businesses — from SEO/SEM to analytics and conversion funnels. I believe every pixel and query should serve the outcome.</p>
         <div class="statgrid">
-          <div class="stat"><h3>30K+</h3><p>Leads influenced</p></div>
-          <div class="stat"><h3>20+</h3><p>Products & sites shipped</p></div>
-          <div class="stat"><h3>99.9%</h3><p>Uptime targets</p></div>
-          <div class="stat"><h3>HIPAA</h3><p>Security mindset</p></div>
+          <div class="stat themed" data-reveal><h3>30K+</h3><p>Leads influenced</p></div>
+          <div class="stat themed" data-reveal><h3>20+</h3><p>Products & sites shipped</p></div>
+          <div class="stat themed" data-reveal><h3>99.9%</h3><p>Uptime targets</p></div>
+          <div class="stat themed" data-reveal><h3>HIPAA</h3><p>Security mindset</p></div>
         </div>
       </div>
-      <div class="card reveal">
+      <div class="card themed" data-reveal>
         <h2>Highlights</h2>
         <ul class="timeline" role="list">
-          <li class="titem"><div class="trole">CS Tutor — Midwestern State University</div><div class="tmeta">2025–Current • Teaching Computer Science to Students at MSU Texas</div></li>
-          <li class="titem"><div class="trole">IT Technician — Midwestern State University</div><div class="tmeta">2022–2023 • 95% first-contact resolution</div></li>
-          <li class="titem"><div class="trole">Graphic Designer — McCoy’s, Empire Tax</div><div class="tmeta">2024 • Brand uplift & assets</div></li>
+          <li class="titem" data-reveal><div class="trole">CS Tutor — Midwestern State University</div><div class="tmeta">2025–Current • Teaching Computer Science to Students at MSU Texas</div></li>
+          <li class="titem" data-reveal><div class="trole">IT Technician — Midwestern State University</div><div class="tmeta">2022–2023 • 95% first-contact resolution</div></li>
+          <li class="titem" data-reveal><div class="trole">Graphic Designer — McCoy’s, Empire Tax</div><div class="tmeta">2024 • Brand uplift & assets</div></li>
         </ul>
       </div>
     </div>
@@ -251,19 +344,19 @@
     <div class="container">
       <h2>Skills & Expertise</h2>
       <div class="skills">
-        <div class="card reveal">
+        <div class="card themed" data-reveal>
           <h3>Frontend</h3>
           <div class="pillwrap">
             <span class="pill">React</span><span class="pill">TypeScript</span><span class="pill">Chakra UI</span><span class="pill">Tailwind</span><span class="pill">Vite/Next</span>
           </div>
         </div>
-        <div class="card reveal">
+        <div class="card themed" data-reveal>
           <h3>Backend</h3>
           <div class="pillwrap">
             <span class="pill">Node / NestJS</span><span class="pill">PostgreSQL</span><span class="pill">Supabase</span><span class="pill">Redis</span><span class="pill">Auth0</span>
           </div>
         </div>
-        <div class="card reveal">
+        <div class="card themed" data-reveal>
           <h3>Cloud & Data</h3>
           <div class="pillwrap">
             <span class="pill">AWS & GCP</span><span class="pill">Docker</span><span class="pill">Analytics</span><span class="pill">RLS & Encryption</span>
@@ -277,22 +370,22 @@
     <div class="container">
       <h2>Professional Experience</h2>
       <div class="grid-2">
-        <div class="card reveal">
+        <div class="card themed" data-reveal>
           <h3 class="trole">Graphic Designer</h3>
           <p class="tmeta">McCoy’s Roofing & Renovations • 2024</p>
           <p>Designed brand system, cards, and LinkedIn presence — driving client engagement.</p>
         </div>
-        <div class="card reveal">
+        <div class="card themed" data-reveal>
           <h3 class="trole">Graphic Designer</h3>
           <p class="tmeta">Empire Tax Services • 2024</p>
           <p>Produced cohesive marketing assets that boosted visibility and event turnout.</p>
         </div>
-        <div class="card reveal">
+        <div class="card themed" data-reveal>
           <h3 class="trole">IT Technician</h3>
           <p class="tmeta">Midwestern State University • 2022–2023</p>
           <p>Deployed 60+ systems, achieved 95% first-contact fix rate, and modernized AV setups.</p>
         </div>
-        <div class="card reveal">
+        <div class="card themed" data-reveal>
           <h3 class="trole">Technical Support & Media Coordinator</h3>
           <p class="tmeta">K Life Pvt Ltd • 2021–2022</p>
           <p>Improved uptime and drove measurable growth across owned social channels.</p>
@@ -305,12 +398,12 @@
     <div class="container">
       <h2>Featured Projects</h2>
       <div class="projects">
-        <article class="proj reveal">
+        <article class="proj themed" data-reveal>
           <div class="thumb"><i class="fa-solid fa-wallet"></i></div>
           <div class="pbody">
             <h3>Hum Cash — Personalized Finance App</h3>
             <p class="pdesc">AI-powered budgeting, real-time tracking, and AES-encrypted vault for personal finance insights.</p>
-            <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">React</span><span class="tag">MySQL</span><span class="tag">AES</span></div>
+            <div class="tags"><span class="tag themed">Python</span><span class="tag themed">Flask</span><span class="tag themed">React</span><span class="tag themed">MySQL</span><span class="tag themed">AES</span></div>
           </div>
           <div class="plinks">
             <a href="https://github.com/Sanithu-99/hum-cash" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Code</a>
@@ -318,19 +411,19 @@
         </article>
       </div>
       <div class="case section" style="padding:0;margin-top:26px">
-        <div class="card reveal">
+        <div class="card themed" data-reveal>
           <h3>Case Study: Wearable Technology in Chronic Disease Monitoring</h3>
           <p>I explored how smartwatches, continuous glucose monitors, biosensors, and AI are reshaping healthcare — moving us closer to a future where treatment is proactive, personalized, and accessible in real time.</p>
           <div class="kpis">
-            <div class="kpi"><h4>+42%</h4><p class="muted">Chronic Diseases</p></div>
-            <div class="kpi"><h4>-28%</h4><p class="muted">Smart Wearables</p></div>
-            <div class="kpi"><h4>+2.1×</h4><p class="muted">Quality of Life</p></div>
+            <div class="kpi themed"><h4>+42%</h4><p class="muted">Chronic Diseases</p></div>
+            <div class="kpi themed"><h4>-28%</h4><p class="muted">Smart Wearables</p></div>
+            <div class="kpi themed"><h4>+2.1×</h4><p class="muted">Quality of Life</p></div>
           </div>
         </div>
-        <div class="card reveal">
+        <div class="card themed" data-reveal>
           <h3>Key Things to Know</h3>
           <ul class="muted" style="margin:0 0 10px 18px">
-            <li>Most Reliable Device for Chronic Disease Monitoring </li>
+            <li>Most Reliable Device for Chronic Disease Monitoring</li>
             <li>Security & Privacy</li>
             <li>Accuracy</li>
           </ul>
@@ -344,8 +437,8 @@
     <div class="container">
       <h2>Kind Words</h2>
       <div class="testis">
-        <blockquote class="quote reveal"><p>“Sanithu moves ideas into production fast — with taste.”</p><span class="muted">— Business Owner, Bryln McCoy</span></blockquote>
-        <blockquote class="quote reveal"><p>“The Chillest Guy I ever met”</p><span class="muted">— Friend, Ethan</span></blockquote>
+        <blockquote class="quote themed" data-reveal><p>“Sanithu moves ideas into production fast — with taste.”</p><span class="muted">— Business Owner, Bryln McCoy</span></blockquote>
+        <blockquote class="quote themed" data-reveal><p>“The Chillest Guy I ever met”</p><span class="muted">— Friend, Ethan</span></blockquote>
       </div>
     </div>
   </section>
@@ -360,26 +453,26 @@
 
   <section id="contact" class="section">
     <div class="container contact">
-      <div class="card reveal">
+      <div class="card themed" data-reveal>
         <h2>Let’s Work Together</h2>
         <p class="muted">Have something ambitious in mind — AI, Startups or growth? I’ll help you ship it.</p>
         <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px">
-          <a class="btn ghost" href="mailto:sanithu.hulathduwage@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
-          <a class="btn ghost" href="tel:+19407823995"><i class="fa-solid fa-phone"></i> Call</a>
-          <a class="btn ghost" target="_blank" rel="noopener" href="https://www.linkedin.com/in/sanithu-hulathduwage/"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-          <a class="btn ghost" target="_blank" rel="noopener" href="https://github.com/Sanithu-99/"><i class="fa-brands fa-github"></i> GitHub</a>
-          <a class="btn ghost" target="_blank" rel="noopener" href="https://www.instagram.com/sanithu.official"><i class="fa-brands fa-instagram"></i> Instagram</a>
+          <a class="btn ghost themed" href="mailto:sanithu.hulathduwage@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
+          <a class="btn ghost themed" href="tel:+19407823995"><i class="fa-solid fa-phone"></i> Call</a>
+          <a class="btn ghost themed" target="_blank" rel="noopener" href="https://www.linkedin.com/in/sanithu-hulathduwage/"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+          <a class="btn ghost themed" target="_blank" rel="noopener" href="https://github.com/Sanithu-99/"><i class="fa-brands fa-github"></i> GitHub</a>
+          <a class="btn ghost themed" target="_blank" rel="noopener" href="https://www.instagram.com/sanithu.official"><i class="fa-brands fa-instagram"></i> Instagram</a>
         </div>
       </div>
-      <div class="card reveal">
+      <div class="card themed" data-reveal>
         <h2>Send a Message</h2>
         <form id="contactForm" novalidate>
           <label class="sr-only" for="name">Name</label>
-          <input id="name" name="name" placeholder="Your name" required>
+          <input class="themed" id="name" name="name" placeholder="Your name" required>
           <label class="sr-only" for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="Email" required>
+          <input class="themed" id="email" name="email" type="email" placeholder="Email" required>
           <label class="sr-only" for="message">Message</label>
-          <textarea id="message" name="message" placeholder="What are we building?" required></textarea>
+          <textarea class="themed" id="message" name="message" placeholder="What are we building?" required></textarea>
           <button class="btn primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
           <p id="formStatus" class="muted" role="status" aria-live="polite"></p>
         </form>
@@ -387,12 +480,12 @@
     </div>
   </section>
 
-  <footer class="footer">
+  <footer class="footer themed">
     <p>© <span id="year"></span> Sanithu Hulathduwage. Crafted with care.</p>
   </footer>
 
   <script>
-    // Theme logic: set tokens, header state, and theme-color meta
+    // ========= THEME & VIEW TRANSITIONS =========
     const themeToggle = document.getElementById('themeToggle');
     const root = document.documentElement;
     const body = document.body;
@@ -400,22 +493,18 @@
 
     const setThemeTokens = (mode) => {
       if(mode === 'light'){
-        // core
         root.style.setProperty('--bg', '#f7f8fc');
         root.style.setProperty('--text', '#1a1a1f');
         root.style.setProperty('--muted', '#56566a');
-        // surfaces
         root.style.setProperty('--surface-1', '#ffffff');
         root.style.setProperty('--surface-2', '#f2f4f8');
         root.style.setProperty('--surface-3', '#e9ecf3');
         root.style.setProperty('--border', 'rgba(0,0,0,.08)');
-        // header
         root.style.setProperty('--header-bg', 'rgba(255,255,255,.35)');
         root.style.setProperty('--header-border', 'rgba(0,0,0,.06)');
         root.style.setProperty('--header-bg-solid', 'rgba(255,255,255,.75)');
         root.style.setProperty('--header-border-strong', 'rgba(0,0,0,.12)');
         root.style.setProperty('--icon', '#1a1a1f');
-        // bg
         body.style.background =
           'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.18), transparent 60%), ' +
           'radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.18), transparent 60%), #f7f8fc';
@@ -446,7 +535,6 @@
       localStorage.setItem('theme', mode);
     };
 
-    // Initial theme: saved -> system -> dark
     const saved = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyTheme(saved || (systemPrefersDark ? 'dark' : 'light'));
@@ -454,36 +542,94 @@
     themeToggle.addEventListener('click', ()=>{
       const current = localStorage.getItem('theme') || (systemPrefersDark ? 'dark' : 'light');
       const next = current === 'dark' ? 'light' : 'dark';
-      applyTheme(next);
+
+      // Use View Transitions if available for buttery theme flip
+      if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.startViewTransition(() => applyTheme(next));
+      } else {
+        applyTheme(next);
+      }
     });
 
-    // Header transparency strengthens on scroll for readability
+    // ========= HEADER SCROLL STATE =========
     const header = document.getElementById('siteHeader');
     const setScrolled = () => {
-      const scrolled = window.scrollY > 8;
-      header.setAttribute('data-scrolled', scrolled ? 'true' : 'false');
+      header.setAttribute('data-scrolled', window.scrollY > 8 ? 'true' : 'false');
     };
     setScrolled();
     window.addEventListener('scroll', setScrolled, {passive:true});
 
-    // Reveal on scroll (respect reduced motion)
+    // ========= STAGGERED REVEAL ON SCROLL =========
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!prefersReduced){
       const obs = new IntersectionObserver((entries)=>{
         for(const e of entries){
           if(e.isIntersecting){
-            e.target.animate([
-              {opacity:0, transform:'translateY(16px)'},
-              {opacity:1, transform:'translateY(0)'}
-            ], {duration:600, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards'});
+            const i = Number(e.target.getAttribute('data-stagger') || 0);
+            e.target.animate(
+              [
+                {opacity:0, transform:'translateY(18px) scale(.98)'},
+                {opacity:1, transform:'translateY(0) scale(1)'}
+              ],
+              {duration: 520, delay: i*60, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards'}
+            );
+            e.target.removeAttribute('data-reveal');
             obs.unobserve(e.target);
           }
         }
       }, {threshold:.12});
-      document.querySelectorAll('.reveal, .proj, .card, .quote').forEach(el=>obs.observe(el));
+
+      // tag revealables with increasing stagger within their containers
+      document.querySelectorAll('[data-reveal]').forEach((container)=>{
+        let idx = 0;
+        container.querySelectorAll('[data-reveal], .titem, .stat, .proj, .card, .quote').forEach(el=>{
+          // avoid double-adding on nested sections
+          if(!el.hasAttribute('data-stagger')){
+            el.setAttribute('data-stagger', idx++);
+          }
+          obs.observe(el);
+        });
+        obs.observe(container);
+      });
     }
 
-    // Simple contact form (mailto fallback) — fixed newline bug
+    // ========= HERO PARALLAX + TILT =========
+    const hero = document.querySelector('.hero');
+    const bg = document.querySelector('.grid-bg');
+    const portraitFrame = document.querySelector('.portrait .frame');
+
+    const lerp = (a,b,t)=>a+(b-a)*t;
+    let mx = 50, my = 50, tx = 0, ty = 0;
+
+    const animateParallax = ()=>{
+      bg.style.setProperty('--mx', `${mx}%`);
+      bg.style.setProperty('--my', `${my}%`);
+      portraitFrame.style.setProperty('--tx', `${tx}deg`);
+      portraitFrame.style.setProperty('--ty', `${ty}deg`);
+      requestAnimationFrame(()=>{ /* keep lightweight */ });
+    };
+
+    const onMove = (e)=>{
+      const rect = hero.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      // ease towards cursor
+      mx = lerp(mx, x*100, 0.12);
+      my = lerp(my, y*100, 0.12);
+      // tilt frame
+      ty = lerp(ty, (x - 0.5) * 6, 0.12);
+      tx = lerp(tx, -(y - 0.5) * 6, 0.12);
+      animateParallax();
+    };
+
+    if(!prefersReduced){
+      hero.addEventListener('pointermove', onMove);
+      hero.addEventListener('pointerleave', ()=>{
+        mx = 50; my = 50; tx = 0; ty = 0; animateParallax();
+      });
+    }
+
+    // ========= CONTACT FORM (mailto) =========
     const form = document.getElementById('contactForm');
     form.addEventListener('submit', (e)=>{
       e.preventDefault();
@@ -497,7 +643,7 @@
       window.location.href = mailto;
     });
 
-    // Year
+    // ========= YEAR =========
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
