@@ -295,6 +295,11 @@
     /* magnetic hover for buttons */
     .magnet{position:relative; overflow:visible}
     .magnet span{display:inline-block}
+      /* Ghost button styling for contrast on dark */
+    .btn.ghost{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--text); backdrop-filter: blur(6px)}
+    .btn.ghost:hover{background:rgba(255,255,255,.1)}
+    /* Ensure bot controls sit above the canvas */
+    .bot-cta{z-index:2}
   </style>
 
   <!-- JSON-LD -->
@@ -817,6 +822,8 @@
 
       // Animation state
       let t = 0, wave = 0, dance = 0;
+      // Cursor look percentages (initialized before animate to avoid TDZ)
+      let lookXpct = 50, lookYpct = 50;
       const clock = new THREE.Clock();
 
       function animate(){
@@ -824,7 +831,7 @@
         t += dt;
         // Idle sway
         bot.position.y = Math.sin(t*1.5)*0.03;
-        head.rotation.y = Math.sin(t*0.8)*0.15 + (mx-50)/50*0.1;
+        head.rotation.y = Math.sin(t*0.8)*0.15 + (lookXpct-50)/50*0.1;
 
         // Eyes blink
         const blink = Math.max(0, Math.sin(t*3.2));
@@ -858,14 +865,14 @@
       animate();
 
       // Mouse look-at (in hero parallax space)
-      let mx = 50, my = 50;
+      // lookXpct/lookYpct already declared above
       const heroEl = document.querySelector('.hero');
       heroEl.addEventListener('pointermove', (e)=>{
         const r = heroEl.getBoundingClientRect();
-        mx = (e.clientX - r.left)/r.width*100;
-        my = (e.clientY - r.top)/r.height*100;
-        const lookX = (mx-50)/50*0.3;
-        const lookY = (my-50)/50*0.15;
+        lookXpct = (e.clientX - r.left)/r.width*100;
+        lookYpct = (e.clientY - r.top)/r.height*100;
+        const lookX = (lookXpct-50)/50*0.3;
+        const lookY = (lookYpct-50)/50*0.15;
         head.rotation.y = lookX;
         head.rotation.x = -lookY;
       }, {passive:true});
