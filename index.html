@@ -18,25 +18,51 @@
   <style>
     :root{
       /* base palette */
-      --bg:#0b0b12; --text:#e9e9f1; --muted:#b8b8cf;
+      --bg:#0b0b12; 
+      --text:#e9e9f1; 
+      --muted:#b8b8cf;
+
       /* surfaces & borders */
-      --surface-1:#121225; --surface-2:#0f0f1d; --surface-3:#14142a; --border:rgba(255,255,255,.08);
+      --surface-1:#121225; 
+      --surface-2:#0f0f1d; 
+      --surface-3:#14142a; 
+      --border:rgba(255,255,255,.08);
+
       /* header */
-      --header-bg: rgba(11,11,18,.35); --header-border: rgba(255,255,255,.06);
-      --header-bg-solid: rgba(11,11,18,.65); --header-border-strong: rgba(255,255,255,.14); --icon: #ffffff;
+      --header-bg: rgba(11,11,18,.35);
+      --header-border: rgba(255,255,255,.06);
+      --header-bg-solid: rgba(11,11,18,.65);
+      --header-border-strong: rgba(255,255,255,.14);
+      --icon: #ffffff;
+
       /* brand */
-      --gradA:#667eea; --gradB:#764ba2; --accent:#88ffdd; --accent2:#ffd166;
+      --gradA:#667eea; 
+      --gradB:#764ba2; 
+      --accent:#88ffdd; 
+      --accent2:#ffd166; 
+
       --shadow:0 20px 40px rgba(0,0,0,.35);
-      /* motion */
-      --dur-1: 220ms; --dur-2: 420ms; --dur-3: 900ms; --ease-1: cubic-bezier(.2,.8,.2,1); --ease-2: cubic-bezier(.16,1,.3,1);
+
+      /* motion tokens */
+      --dur-1: 220ms;
+      --dur-2: 420ms;
+      --dur-3: 900ms;
+      --ease-1: cubic-bezier(.2,.8,.2,1);
+      --ease-2: cubic-bezier(.16,1,.3,1);
+      --ease-spring: cubic-bezier(.2, .65, .2, 1.2);
+
+      /* mobile tuning */
       --radius: 18px;
     }
+
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
-      margin:0; -webkit-tap-highlight-color: transparent; touch-action: pan-y pinch-zoom;
+      margin:0;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: pan-y pinch-zoom;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--text);
+      color:var(--text); 
       background:
         radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%),
         radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%),
@@ -48,10 +74,24 @@
     a{color:inherit; text-decoration: none}
 
     /* smoother animation on mobile/touch */
-    .themed, body, .header, .card, .stat, .proj, .tag, .chip, input, textarea, .btn, .kpi, .quote {
-      transition: background-color var(--dur-2) var(--ease-1), color var(--dur-2) var(--ease-1),
-                  border-color var(--dur-2) var(--ease-1), box-shadow var(--dur-1) var(--ease-1),
-                  transform var(--dur-1) var(--ease-1);
+    .themed,
+    body,
+    .header,
+    .card,
+    .stat,
+    .proj,
+    .tag,
+    .chip,
+    input, textarea,
+    .btn,
+    .kpi,
+    .quote {
+      transition:
+        background-color var(--dur-2) var(--ease-1),
+        color var(--dur-2) var(--ease-1),
+        border-color var(--dur-2) var(--ease-1),
+        box-shadow var(--dur-1) var(--ease-1),
+        transform var(--dur-1) var(--ease-1);
       will-change: transform, box-shadow;
       transform: translateZ(0);
     }
@@ -139,14 +179,22 @@
     .progress-text{ display:flex; align-items:center; gap:10px; margin:10px 2px 8px; color:var(--muted); font-weight:700; font-size:.95rem; }
 
     /* ======= EASTER EGG OVERLAY (balls) ======= */
+    body.egg-open { 
+      overflow: hidden; 
+      overscroll-behavior: contain; 
+      touch-action: none;
+    }
     #eggOverlay{
       position:fixed; inset:0; z-index:11000; display:none;
-      pointer-events:auto;
+      pointer-events:auto; /* we want the button clickable */
     }
     #eggCanvas{
-      position:absolute; inset:0; width:100svw; height:100svh; display:block;
-      background: transparent;
-      pointer-events:none;
+      position:absolute; inset:0; 
+      width:100vw; 
+      height:100vh; 
+      display:block;
+      background: transparent; /* keep page visible */
+      pointer-events:none; /* so clicks go to the button only */
     }
     #eggButton{
       position:absolute; inset:auto auto 28px 50%; transform:translateX(-50%);
@@ -158,58 +206,185 @@
     }
     @keyframes eggBtnIn{ from{ opacity:0; transform:translate(-50%, 8px)} to{ opacity:1; transform:translate(-50%, 0)} }
 
-    /* ======= PORTFOLIO (your original styles trimmed for brevity) ======= */
+    /* ======= Header ======= */
     .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(10px); background:var(--header-bg); border-bottom:1px solid var(--header-border); transition:background var(--dur-1) var(--ease-1),border-color var(--dur-1) var(--ease-1)}
     .header[data-scrolled="true"]{background:var(--header-bg-solid); border-bottom-color:var(--header-border-strong)}
     .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
     .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px; cursor:pointer}
-    .logo i{background:linear-gradient(135deg,var(--gradA),var(--gradB)); -webkit-background-clip:text; background-clip:text; color:transparent; animation: logoPulse var(--dur-3) var(--ease-2) infinite alternate;}
-    @keyframes logoPulse { from { filter: drop-shadow(0 0 0 rgba(102,126,234,0)); transform: translateY(0) } to { filter: drop-shadow(0 6px 16px rgba(102,126,234,.25)); transform: translateY(-1px) } }
+    .logo i{background:linear-gradient(135deg,var(--gradA),var(--gradB)); -webkit-background-clip:text; background-clip:text; color:transparent;
+      animation: logoPulse var(--dur-3) var(--ease-2) infinite alternate;
+    }
+    @keyframes logoPulse {
+      from { filter: drop-shadow(0 0 0 rgba(102,126,234,0)); transform: translateY(0) }
+      to   { filter: drop-shadow(0 6px 16px rgba(102,126,234,.25)); transform: translateY(-1px) }
+    }
     .nav ul{margin-left:auto;display:flex;gap:22px;list-style:none;padding:0}
     .nav a{opacity:.85;text-decoration:none;font-weight:600; position:relative}
-    .nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background: linear-gradient(90deg,var(--gradA),var(--gradB)); transform: scaleX(0); transform-origin:left; transition: transform var(--dur-1) var(--ease-1);}
+    .nav a::after{
+      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background: linear-gradient(90deg,var(--gradA),var(--gradB));
+      transform: scaleX(0); transform-origin:left; transition: transform var(--dur-1) var(--ease-1);
+    }
     .nav a:hover,.nav a:focus{opacity:1}
     .nav a:hover::after,.nav a:focus::after{ transform: scaleX(1) }
     .btn.ghost{background:transparent}
     .btn.primary{background:linear-gradient(135deg,var(--gradA),var(--gradB));border:none;color:white}
     .theme-toggle{border:none;background:transparent;font-size:1.25rem;cursor:pointer;color:var(--icon); padding:.5rem; border-radius:12px}
 
+    /* ======= Hero ======= */
     .hero{position:relative;min-height:92vh;display:grid;place-items:center;padding:120px 20px 60px;overflow:hidden}
-    .grid-bg{position:absolute;inset:-10%;
+    .grid-bg{
+      position:absolute;inset:-10%;
       background:
         radial-gradient(60% 40% at var(--mx,50%) var(--my,50%), rgba(118,75,162,.18), transparent 60%),
         radial-gradient(40% 30% at calc(100% - var(--mx,50%)) 20%, rgba(102,126,234,.18), transparent 60%);
       mask-image:radial-gradient( at 50% 50%, black 40%, transparent 75%);
-      transition: transform var(--dur-3) var(--ease-1); will-change: transform; }
+      transition: transform var(--dur-3) var(--ease-1);
+      will-change: transform;
+    }
     .hero-inner{max-width:1100px;margin:auto;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
     .title{font-size:clamp(2.2rem,6vw,4rem);line-height:1.05;margin:0 0 14px}
-    .title .grad{ background:linear-gradient(120deg,var(--gradA),var(--gradB),var(--gradA)); -webkit-background-clip:text;background-clip:text;color:transparent; background-size: 200% 200%; animation: shimmer 6s ease-in-out infinite;}
+    .title .grad{
+      background:linear-gradient(120deg,var(--gradA),var(--gradB),var(--gradA));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      background-size: 200% 200%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 0% 50% }
+      50%{ background-position: 100% 50% }
+      100%{ background-position: 0% 50% }
+    }
     .subtitle{font-size:clamp(1rem,2.8vw,1.25rem);color:var(--muted)}
     .badges{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 26px}
     .chip{padding:.5rem .8rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--border);font-weight:600; backdrop-filter: blur(6px)}
 
+    .portrait{position:relative;isolation:isolate;perspective: 1000px}
+    .portrait .frame{
+      aspect-ratio:1/1;border-radius:24px; background:linear-gradient(135deg,rgba(102,126,234,.22),rgba(118,75,162,.22));
+      border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden;
+      transform: rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg)); transform-style: preserve-3d; transition: transform var(--dur-1) var(--ease-1);
+      will-change: transform;
+    }
+    .portrait img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.05)}
+    .floating{position:absolute;inset:auto -18px -18px auto;background:rgba(255,255,255,.06);border:1px solid var(--border);backdrop-filter:blur(8px);padding:.7rem 1rem;border-radius:14px;font-weight:700; transform: translateZ(30px)}
+
+    /* ======= Sections ======= */
     .section{padding:80px 20px}
     .container{max-width:1200px;margin:auto}
     .section h2{font-size:clamp(1.6rem,4.5vw,2.2rem);margin:0 0 28px;background:linear-gradient(135deg,var(--gradA),var(--gradB));-webkit-background-clip:text;background-clip:text;color:transparent}
 
+    .about{display:grid;grid-template-columns:1.1fr 1fr;gap:34px}
     .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow)}
+    .card:hover{transform: translateY(-4px)}
+    .card[data-reveal]{opacity:0; transform: translateY(16px);}
+
+    .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+    .stat{padding:16px;border-radius:14px;background:var(--surface-1);border:1px solid var(--border)}
+    .stat:hover{transform: translateY(-2px)}
+    .stat h3{margin:0;font-size:1.4rem}
+    .stat p{margin:6px 0 0;color:var(--muted);font-weight:600}
+
+    .skills{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .pillwrap{display:flex;flex-wrap:wrap;gap:8px}
+    .pill{padding:.45rem .75rem;border-radius:999px;background:rgba(102,126,234,.22);border:1px solid rgba(102,126,234,.25);font-weight:700}
+
+    .timeline{position:relative;padding-left:26px}
+    .timeline::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--gradA),transparent)}
+    .titem{position:relative;margin:0 0 20px}
+    .titem::marker{content:""}
+    .titem::before{content:"";position:absolute;left:-2px;top:.4rem;width:10px;height:10px;border-radius:50%;background:var(--gradA);box-shadow:0 0 0 3px rgba(102,126,234,.25)}
+    .trole{font-weight:800}
+    .tmeta{color:var(--muted);font-weight:600}
+
     .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .proj{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--surface-1);display:flex;flex-direction:column;box-shadow:var(--shadow); transform: translateZ(0)}
+    .proj:hover{transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,.35)}
     .thumb{position:relative;aspect-ratio:16/9;display:grid;place-items:center;background:linear-gradient(135deg,var(--gradA),var(--gradB))}
+    .thumb::after{
+      content:""; position:absolute; inset:0;
+      background: radial-gradient(60% 60% at 50% 40%, rgba(255,255,255,.15), transparent 60%);
+      mix-blend-mode: screen; opacity:.65; transition: opacity var(--dur-1) var(--ease-1)
+    }
+    .proj:hover .thumb::after{opacity:.9}
     .thumb i{font-size:44px;color:white;opacity:.95}
+    .pbody{padding:18px}
+    .pbody h3{margin:0 0 6px}
+    .pdesc{color:var(--muted)}
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+    .tag{background:var(--surface-2);border:1px solid var(--border);padding:.35rem .6rem;border-radius:999px;font-weight:700}
+
+    .plinks{display:flex;gap:12px;margin-top:auto;padding:0 18px 18px}
+    .plinks a{display:inline-flex;align-items:center;gap:8px;font-weight:800}
+    .plinks a:hover{transform: translateY(-2px)}
+
+    .case{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:stretch}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .kpi{background:var(--surface-1);padding:14px;border:1px solid var(--border);border-radius:14px}
+    .kpi h4{margin:0 0 4px}
+
+    .testis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .quote{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:var(--radius); padding:20px}
 
     .contact{display:grid;grid-template-columns:1fr .9fr;gap:22px}
     form{display:grid;gap:12px}
     input,textarea{background:var(--surface-2);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:12px;font:inherit}
     input:focus, textarea:focus{outline:2px solid var(--accent); outline-offset: 2px}
     textarea{min-height:120px;resize:vertical}
-    .footer{padding:36px 20px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);text-align:center}
 
-    /* Responsive & reduced motion (same as before) omitted for brevity */
-    @media (max-width: 980px){ .hero{min-height: 80vh; padding: 100px 16px 40px} .hero-inner{grid-template-columns:1fr;gap:28px} .contact{grid-template-columns:1fr} .projects{grid-template-columns:1fr 1fr}}
-    @media (max-width: 740px){ .section{padding:56px 16px} .nav ul{display:none} .projects{grid-template-columns:1fr}}
-    ::view-transition-old(page), ::view-transition-new(page){ animation-duration: var(--dur-2); animation-timing-function: var(--ease-2); }
-    @media (prefers-reduced-motion: reduce){ #welcome,#progressScrim,#eggOverlay{display:none !important} }
+    .footer{padding:36px 20px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);text-align:center}
+    .muted{color:var(--muted)}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
+
+    /* ======= Responsive polish ======= */
+    @media (max-width: 980px){
+      .hero{min-height: 80vh; padding: 100px 16px 40px}
+      .hero-inner{grid-template-columns:1fr;gap:28px}
+      .about,.case,.contact{grid-template-columns:1fr}
+      .skills{grid-template-columns:repeat(2,1fr)}
+      .projects{grid-template-columns:1fr 1fr}
+      .testis{grid-template-columns:1fr 1fr}
+      .floating{inset:auto 0 -12px auto; transform:none}
+    }
+    @media (max-width: 740px){
+      .section{padding:56px 16px}
+      .nav ul{display:none} /* keep functionality; no menu added */
+      .projects,.skills,.testis{grid-template-columns:1fr}
+      .statgrid{grid-template-columns:repeat(2,1fr)}
+      .portrait .frame{border-radius:20px}
+      .btn{padding:.8rem 1.05rem}
+      .thumb i{font-size:36px}
+      .pbody{padding:14px}
+      .kpi{padding:12px}
+      .card{padding:18px}
+      .grid-2{grid-template-columns:1fr}
+    }
+    @media (max-width: 400px){
+      .title{font-size: clamp(1.9rem, 9vw, 2.4rem)}
+      .subtitle{font-size: .98rem}
+      .chip{padding:.45rem .65rem}
+      .btn{padding:.75rem 1rem}
+    }
+
+    /* View Transitions */
+    ::view-transition-old(page),
+    ::view-transition-new(page){
+      animation-duration: var(--dur-2);
+      animation-timing-function: var(--ease-2);
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      .reveal,[data-reveal]{opacity:1 !important; transform:none !important; animation:none !important}
+      .grid-bg,.portrait .frame,.btn,.proj,.card,.chip,.pill{transition:none !important}
+      ::view-transition-old(page),
+      ::view-transition-new(page){animation: none !important}
+      #welcome{display:none !important}
+      #progressScrim{display:none !important}
+      #eggOverlay{display:none !important}
+    }
   </style>
 
   <!-- JSON-LD -->
@@ -311,7 +486,6 @@
     </div>
   </main>
 
-  <!-- (Sections About/Skills/Experience/Projects/Testimonials/Resume/Contact/Footer unchanged from prior version) -->
   <section id="about" class="section">
     <div class="container about">
       <div class="card themed" data-reveal>
@@ -493,16 +667,27 @@
     function showScrim(){
       if (!scrim) return;
       scrim.classList.add('show');
+      scrim.style.removeProperty('display'); // ensure CSS controls display
+      // restart bar animation
       const bar = scrim.querySelector('.progress-fill');
       if(bar){
         const clone = bar.cloneNode(true);
         bar.parentNode.replaceChild(clone, bar);
       }
     }
+    function hideScrim(){
+      if(!scrim) return;
+      scrim.classList.remove('show');
+      scrim.style.removeProperty('display');
+    }
     function hideWelcome(silent=false){
       if(!w) return;
       showScrim();
-      const done = ()=>{ w.style.display='none'; document.body.style.overflow='auto'; scrim.style.display='none'; };
+      const done = ()=>{
+        w.style.display='none'; 
+        document.body.style.overflow='auto'; 
+        hideScrim();
+      };
       if (document.startViewTransition && !prefersReduced && !silent){
         document.startViewTransition(()=> w.classList.add('hidden'));
         setTimeout(done, 840);
@@ -544,7 +729,7 @@
       function loop(now=performance.now()){
         if(!ctx||w.style.display==='none') return;
         const dt=Math.min(33,now-last); last=now;
-        // nice trail instead of full clear
+        // soft trail
         ctx.fillStyle='rgba(0,0,0,0.08)'; ctx.fillRect(0,0,c.width,c.height);
         for(const p of dots){ p.x+=p.vx*dt*(p.z*2); p.y+=p.vy*dt*(p.z*2); if(p.x<0||p.x>c.width) p.vx*=-1; if(p.y<0||p.y>c.height) p.vy*=-1; }
         for(const p of dots){ ctx.beginPath(); ctx.arc(p.x,p.y,(1.1+p.z*1.6)*devicePixelRatio,0,Math.PI*2); ctx.fillStyle=mix(p.z); ctx.shadowBlur=8; ctx.shadowColor='rgba(180,200,255,.35)'; ctx.fill(); }
@@ -554,7 +739,7 @@
       if(!prefersReduced) loop();
     }
 
-    // ========= THEME (default dark, respect system) =========
+    // ========= THEME: Default dark, respect system preference =========
     const themeToggle = document.getElementById('themeToggle');
     const root = document.documentElement;
     const body = document.body;
@@ -568,7 +753,9 @@
         root.style.setProperty('--border', 'rgba(0,0,0,.08)'); root.style.setProperty('--header-bg', 'rgba(255,255,255,.35)');
         root.style.setProperty('--header-border', 'rgba(0,0,0,.06)'); root.style.setProperty('--header-bg-solid', 'rgba(255,255,255,.75)');
         root.style.setProperty('--header-border-strong', 'rgba(0,0,0,.12)'); root.style.setProperty('--icon', '#1a1a1f');
-        body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.18), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.18), transparent 60%), #f7f8fc';
+        body.style.background =
+          'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.18), transparent 60%), ' +
+          'radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.18), transparent 60%), #f7f8fc';
         metaTheme?.setAttribute('content', '#f7f8fc');
       } else {
         root.setAttribute('data-theme','dark');
@@ -577,12 +764,18 @@
         root.style.setProperty('--border', 'rgba(255,255,255,.08)'); root.style.setProperty('--header-bg', 'rgba(11,11,18,.35)');
         root.style.setProperty('--header-border', 'rgba(255,255,255,.06)'); root.style.setProperty('--header-bg-solid', 'rgba(11,11,18,.65)');
         root.style.setProperty('--header-border-strong', 'rgba(255,255,255,.14)'); root.style.setProperty('--icon', '#ffffff');
-        body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%), #0b0b12';
+        body.style.background =
+          'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%), ' +
+          'radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%), #0b0b12';
         metaTheme?.setAttribute('content', '#0b0b12');
       }
     }
-    const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const systemMedia = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+    const systemDark = systemMedia ? systemMedia.matches : true;
     setThemeTokens(systemDark ? 'dark' : 'light');
+    systemMedia?.addEventListener?.('change', e => setThemeTokens(e.matches ? 'dark':'light'));
+
     themeToggle?.addEventListener('click', ()=>{
       const current = root.getAttribute('data-theme') || (systemDark ? 'dark' : 'light');
       const next = current === 'dark' ? 'light' : 'dark';
@@ -593,11 +786,15 @@
       }
     });
 
-    // ========= HEADER SCROLL / REVEAL / PARALLAX (unchanged) =========
+    // ========= HEADER SCROLL STATE =========
     const header = document.getElementById('siteHeader');
-    const setScrolled = () => header?.setAttribute('data-scrolled', window.scrollY > 8 ? 'true' : 'false');
-    setScrolled(); window.addEventListener('scroll', setScrolled, {passive:true});
+    const setScrolled = () => {
+      header.setAttribute('data-scrolled', window.scrollY > 8 ? 'true' : 'false');
+    };
+    setScrolled();
+    window.addEventListener('scroll', setScrolled, {passive:true});
 
+    // ========= STAGGERED REVEAL ON SCROLL =========
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(!prefersReducedMotion){
       const obs = new IntersectionObserver((entries)=>{
@@ -605,48 +802,83 @@
           if(e.isIntersecting){
             const i = Number(e.target.getAttribute('data-stagger') || 0);
             e.target.animate(
-              [{opacity:0, transform:'translateY(18px) scale(.98)'},{opacity:1, transform:'translateY(0) scale(1)'}],
+              [
+                {opacity:0, transform:'translateY(18px) scale(.98)'},
+                {opacity:1, transform:'translateY(0) scale(1)'}
+              ],
               {duration: 520, delay: i*60, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards'}
             );
-            e.target.removeAttribute('data-reveal'); obs.unobserve(e.target);
+            e.target.removeAttribute('data-reveal');
+            obs.unobserve(e.target);
           }
         }
       }, {threshold:.12});
+
       document.querySelectorAll('[data-reveal]').forEach((container)=>{
         let idx = 0;
         container.querySelectorAll('[data-reveal], .titem, .stat, .proj, .card, .quote').forEach(el=>{
-          if(!el.hasAttribute('data-stagger')) el.setAttribute('data-stagger', idx++);
+          if(!el.hasAttribute('data-stagger')){
+            el.setAttribute('data-stagger', idx++);
+          }
           obs.observe(el);
         });
         obs.observe(container);
       });
     }
 
+    // ========= HERO PARALLAX + TILT =========
     const hero = document.querySelector('.hero');
     const bg2 = document.querySelector('.grid-bg');
     const portraitFrame = document.querySelector('.portrait .frame');
+
     const small = window.matchMedia('(max-width: 740px)').matches;
-    const PARALLAX_DEG = small ? 3 : 6; const LERP = small ? 0.10 : 0.12;
+    const PARALLAX_DEG = small ? 3 : 6; // gentler on mobile, same effect
+    const LERP = small ? 0.10 : 0.12;   // slightly softer easing on mobile
+
     const lerp = (a,b,t)=>a+(b-a)*t;
-    let mx = 50, my = 50, tx = 0, ty = 0, ticking = false;
-    function updateParallax(){ ticking = false; bg2?.style.setProperty('--mx', `${mx}%`); bg2?.style.setProperty('--my', `${my}%`); portraitFrame?.style.setProperty('--tx', `${tx}deg`); portraitFrame?.style.setProperty('--ty', `${ty}deg`); }
+    let mx = 50, my = 50, tx = 0, ty = 0;
+    let ticking = false;
+
+    function updateParallax(){
+      ticking = false;
+      bg2?.style.setProperty('--mx', `${mx}%`);
+      bg2?.style.setProperty('--my', `${my}%`);
+      portraitFrame?.style.setProperty('--tx', `${tx}deg`);
+      portraitFrame?.style.setProperty('--ty', `${ty}deg`);
+    }
+
     function onMove(e){
       const rect = hero.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
       const y = (e.clientY - rect.top) / rect.height;
-      mx = lerp(mx, x*100, LERP); my = lerp(my, y*100, LERP); ty = lerp(ty, (x - 0.5) * PARALLAX_DEG, LERP); tx = lerp(tx, -(y - 0.5) * PARALLAX_DEG, LERP);
-      if(!ticking){ ticking = true; requestAnimationFrame(updateParallax); }
-    }
-    if(!prefersReducedMotion){
-      hero?.addEventListener('pointermove', onMove, {passive:true});
-      hero?.addEventListener('pointerleave', ()=>{ mx=50; my=50; tx=0; ty=0; if(!ticking){ ticking=true; requestAnimationFrame(updateParallax); } }, {passive:true});
+      mx = lerp(mx, x*100, LERP);
+      my = lerp(my, y*100, LERP);
+      ty = lerp(ty, (x - 0.5) * PARALLAX_DEG, LERP);
+      tx = lerp(tx, -(y - 0.5) * PARALLAX_DEG, LERP);
+      if(!ticking){
+        ticking = true;
+        requestAnimationFrame(updateParallax);
+      }
     }
 
-    // ========= CONTACT FORM =========
+    if(!prefersReducedMotion){
+      hero?.addEventListener('pointermove', onMove, {passive:true});
+      hero?.addEventListener('pointerleave', ()=>{
+        mx = 50; my = 50; tx = 0; ty = 0;
+        if(!ticking){
+          ticking = true;
+          requestAnimationFrame(updateParallax);
+        }
+      }, {passive:true});
+    }
+
+    // ========= CONTACT FORM (mailto) =========
     const form = document.getElementById('contactForm');
-    form?.addEventListener('submit', (e)=>{
+    form.addEventListener('submit', (e)=>{
       e.preventDefault();
-      const name = form.name.value.trim(), email = form.email.value.trim(), message = form.message.value.trim();
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
       const status = document.getElementById('formStatus');
       if(!name || !email || !message){ status.textContent = 'Please fill out all fields.'; return; }
       const body = `${message}\n\n— ${name} (${email})`;
@@ -670,9 +902,11 @@
       return clickTimes.length;
     }
 
-    logoEl?.addEventListener('click', ()=>{
+    logoEl?.addEventListener('click', (e)=>{
       clickTimes.push(performance.now());
       if (within(800) >= 3) { // triple click within 800ms
+        e.preventDefault();
+        e.stopPropagation();
         clickTimes = [];
         launchEggFromElement(logoEl);
         playChime(); // gentle chime
@@ -688,55 +922,77 @@
       return ['#7bffb2','#8ef9f3','#4cc9f0','#a78bfa','#f72585','#ffd166','#88ffdd','#fca311'];
     }
 
+    // Soft triad chime (no external files)
+    let audioCtx;
     function playChime(){
       try{
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const t0 = ctx.currentTime + 0.02;
-        const gain = ctx.createGain(); gain.gain.value = 0.08; gain.connect(ctx.destination);
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        audioCtx.resume?.();
+        const t0 = audioCtx.currentTime + 0.02;
+        const master = audioCtx.createGain(); master.gain.value = 0.08; master.connect(audioCtx.destination);
 
-        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5 soft triad
+        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
         notes.forEach((freq, i)=>{
-          const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = freq;
-          const g = ctx.createGain(); g.gain.setValueAtTime(0, t0);
-          g.gain.linearRampToValueAtTime(0.15, t0 + 0.03 + i*0.02);
+          const o = audioCtx.createOscillator(); o.type = 'sine'; o.frequency.value = freq;
+          const g = audioCtx.createGain(); g.gain.setValueAtTime(0, t0);
+          g.gain.linearRampToValueAtTime(0.18, t0 + 0.03 + i*0.02);
           g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.35 + i*0.02);
-          o.connect(g); g.connect(gain);
+          o.connect(g); g.connect(master);
           o.start(t0 + i*0.02); o.stop(t0 + 0.5 + i*0.02);
         });
-      }catch(e){ /* noop if blocked */ }
+      }catch(e){ /* ignore if blocked */ }
     }
 
     function launchEggFromElement(el){
       if(!eggOverlay || !eggCanvas) return;
+
+      // Lock page scroll
+      document.body.classList.add('egg-open');
+
+      // Show overlay
       eggOverlay.style.display = 'block';
       eggBtn.style.display = 'none';
 
-      const dpr = window.devicePixelRatio || 1;
-      function resize(){
-        eggCanvas.width = innerWidth * dpr;
-        eggCanvas.height = innerHeight * dpr;
-        eggCanvas.style.width = '100svw';
-        eggCanvas.style.height = '100svh';
+      // Block wheel/touch scrolling while active (iOS needs preventDefault)
+      const blockScroll = (e)=> e.preventDefault();
+      eggOverlay.addEventListener('wheel', blockScroll, { passive:false });
+      eggOverlay.addEventListener('touchmove', blockScroll, { passive:false });
+
+      // Canvas sizing: use visualViewport when available for true on-screen bounds
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1)); // cap DPR for perf
+      const vv = window.visualViewport;
+      function size(){
+        const vw = vv ? vv.width : window.innerWidth;
+        const vh = vv ? vv.height : window.innerHeight;
+        eggCanvas.width  = Math.round(vw * dpr);
+        eggCanvas.height = Math.round(vh * dpr);
+        eggCanvas.style.width  = vw + 'px';
+        eggCanvas.style.height = vh + 'px';
       }
-      resize(); window.addEventListener('resize', resize, {passive:true});
+      size();
+      vv?.addEventListener('resize', size, { passive:true });
+      vv?.addEventListener('scroll', size, { passive:true }); // address bar show/hide
+      window.addEventListener('resize', size, { passive:true });
 
       // Spawn origin = center of logo (viewport coords)
       const rect = el.getBoundingClientRect();
       const ox = (rect.left + rect.width/2) * dpr;
-      const oy = (rect.top + rect.height/2) * dpr;
+      const oy = (rect.top  + rect.height/2) * dpr;
 
       const ctx = eggCanvas.getContext('2d');
+      ctx.clearRect(0,0,eggCanvas.width, eggCanvas.height);
+
       const palette = getBallPalette();
       const balls = [];
-      const count = Math.min(56, Math.floor(innerWidth/18));
+      const count = Math.min(56, Math.floor((vv ? vv.width : innerWidth)/18));
       for(let i=0;i<count;i++){
-        const ang = (Math.random()*Math.PI*2);
+        const ang = Math.random()*Math.PI*2;
         const spd = (Math.random()*0.9 + 0.8) * 1.7;
         const r = (Math.random()*10 + 8) * dpr;
         balls.push({
           x: ox, y: oy,
-          vx: Math.cos(ang)*spd* (12 * dpr),
-          vy: Math.sin(ang)*spd* (10 * dpr) - (10 * dpr),
+          vx: Math.cos(ang)*spd*(12*dpr),
+          vy: Math.sin(ang)*spd*(10*dpr) - (10*dpr),
           r,
           color: palette[i % palette.length]
         });
@@ -745,45 +1001,60 @@
       // Physics tuned for screen-bounce (viewport bounds)
       const g = 0.6 * dpr;      // gravity
       const bounce = 0.80;      // restitution
-      const fric = 0.996;       // air friction
+      const baseFric = 0.997;   // air friction base (per 16.67ms)
       const wallFric = 0.985;   // floor/ceiling friction
-      const settleVel = 0.11 * dpr;
-      const settleFramesNeeded = 55;
+      const settleRMS = 0.20 * dpr;   // global RMS velocity threshold
+      const settleFramesNeeded = 50;
       let settledFrames = 0;
       let running = true;
+
+      // Fail-safe: reveal button if settle never triggers
+      const failSafe = setTimeout(()=> {
+        if (running) { running = false; showEggButton(cleanup); }
+      }, 4200);
+
+      // subtle trail
+      function fadeFrame(w,h){
+        ctx.fillStyle = 'rgba(0,0,0,0.10)';
+        ctx.fillRect(0,0,w,h);
+      }
 
       let last = performance.now();
       function step(now=performance.now()){
         if(!running) return;
-        const dt = Math.min(33, now - last); last = now;
+        const dt = Math.min(50, now - last); // clamp huge gaps
+        last = now;
         const w = eggCanvas.width, h = eggCanvas.height;
 
-        // fade previous frame for trails
-        ctx.fillStyle = 'rgba(0,0,0,0.10)';
-        ctx.fillRect(0,0,w,h);
+        fadeFrame(w,h);
 
-        let maxSpeed = 0;
+        // time scaling (consistent across FPS)
+        const t = dt / 16.67;                
+        const fric = Math.pow(baseFric, dt); 
+
+        let sumSq = 0;
 
         for(const b of balls){
-          b.vy += g;
-          b.x += b.vx;
-          b.y += b.vy;
+          // integrate
+          b.vy += g * t;
+          b.x  += b.vx * t;
+          b.y  += b.vy * t;
 
-          // walls (viewport bounds)
-          if(b.x - b.r < 0){ b.x = b.r; b.vx = -b.vx * bounce; b.vy *= wallFric; }
-          if(b.x + b.r > w){ b.x = w - b.r; b.vx = -b.vx * bounce; b.vy *= wallFric; }
-          if(b.y - b.r < 0){ b.y = b.r; b.vy = -b.vy * bounce; b.vx *= wallFric; }
-          if(b.y + b.r > h){ b.y = h - b.r; b.vy = -b.vy * bounce; b.vx *= wallFric; }
+          // walls = canvas edges (screen bounds)
+          if(b.x - b.r < 0){ b.x = b.r;       b.vx = -b.vx * bounce; b.vy *= wallFric; }
+          if(b.x + b.r > w){ b.x = w - b.r;   b.vx = -b.vx * bounce; b.vy *= wallFric; }
+          if(b.y - b.r < 0){ b.y = b.r;       b.vy = -b.vy * bounce; b.vx *= wallFric; }
+          if(b.y + b.r > h){ b.y = h - b.r;   b.vy = -b.vy * bounce; b.vx *= wallFric; }
 
-          // air friction
-          b.vx *= fric; b.vy *= fric;
+          // friction
+          b.vx *= fric; 
+          b.vy *= fric;
 
           // glossy gradient + glow
           const grd = ctx.createRadialGradient(b.x - b.r*0.45, b.y - b.r*0.45, b.r*0.2, b.x, b.y, b.r);
           grd.addColorStop(0, 'rgba(255,255,255,0.9)');
           grd.addColorStop(0.35, b.color);
           grd.addColorStop(1, 'rgba(0,0,0,0.35)');
-
           ctx.save();
           ctx.shadowBlur = 20;
           ctx.shadowColor = b.color + '88';
@@ -793,15 +1064,18 @@
           ctx.fill();
           ctx.restore();
 
-          const speed = Math.hypot(b.vx, b.vy);
-          if(speed > maxSpeed) maxSpeed = speed;
+          const s2 = b.vx*b.vx + b.vy*b.vy;
+          sumSq += s2;
         }
 
-        if(maxSpeed < settleVel){
+        // RMS speed across all balls
+        const rms = Math.sqrt(sumSq / balls.length);
+        if(rms < settleRMS){
           settledFrames++;
           if(settledFrames >= settleFramesNeeded){
             running = false;
-            showEggButton();
+            clearTimeout(failSafe);
+            showEggButton(cleanup);
             return;
           }
         } else {
@@ -810,19 +1084,30 @@
 
         requestAnimationFrame(step);
       }
-      // start with a quick clear so first frame is clean
-      ctx.clearRect(0,0,eggCanvas.width, eggCanvas.height);
+
       requestAnimationFrame(step);
+
+      // Cleanup helper
+      function cleanup(){
+        document.body.classList.remove('egg-open');
+        const vv = window.visualViewport;
+        vv?.removeEventListener('resize', size);
+        vv?.removeEventListener('scroll', size);
+        window.removeEventListener('resize', size);
+        eggOverlay.removeEventListener('wheel', blockScroll);
+        eggOverlay.removeEventListener('touchmove', blockScroll);
+      }
     }
 
-    function showEggButton(){
+    function showEggButton(after){
       eggBtn.style.display = 'inline-flex';
       eggBtn.onclick = () => {
-        // clean and hide overlay
+        // clear and hide overlay
         const ctx = eggCanvas.getContext('2d');
         ctx && ctx.clearRect(0,0,eggCanvas.width,eggCanvas.height);
         eggBtn.style.display = 'none';
         eggOverlay.style.display = 'none';
+        after?.();
       };
     }
   </script>
