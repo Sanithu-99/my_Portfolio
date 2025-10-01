@@ -133,24 +133,36 @@
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border:1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.45);
     }
-    .progress-bar{
-      height:8px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.1);
-    }
-    .progress-fill{
-      width:0%; height:100%;
-      background: linear-gradient(90deg, var(--gradA), var(--gradB));
-      animation: loadbar 820ms var(--ease-2) forwards;
-    }
+    .progress-bar{ height:8px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.1); }
+    .progress-fill{ width:0%; height:100%; background: linear-gradient(90deg, var(--gradA), var(--gradB)); animation: loadbar 820ms var(--ease-2) forwards; }
     @keyframes loadbar{ from{ width:0% } to{ width:100% } }
-    .progress-text{
-      display:flex; align-items:center; gap:10px; margin:10px 2px 8px; color:var(--muted); font-weight:700; font-size:.95rem;
+    .progress-text{ display:flex; align-items:center; gap:10px; margin:10px 2px 8px; color:var(--muted); font-weight:700; font-size:.95rem; }
+
+    /* ======= EASTER EGG OVERLAY (balls) ======= */
+    #eggOverlay{
+      position:fixed; inset:0; z-index:11000; display:none;
+      pointer-events:auto; /* we want the button clickable */
     }
+    #eggCanvas{
+      position:absolute; inset:0; width:100%; height:100%; display:block;
+      background: transparent; /* keep your page visible underneath */
+      pointer-events:none; /* so clicks go to the button only */
+    }
+    #eggButton{
+      position:absolute; inset:auto auto 28px 50%; transform:translateX(-50%);
+      display:none; padding:.9rem 1.2rem; border-radius:999px; border:1px solid var(--border);
+      font-weight:900; letter-spacing:.2px; cursor:pointer; z-index:2;
+      background:linear-gradient(135deg,var(--gradA),var(--gradB)); color:#fff;
+      box-shadow: 0 14px 30px rgba(0,0,0,.35);
+      animation: eggBtnIn 360ms var(--ease-2) both;
+    }
+    @keyframes eggBtnIn{ from{ opacity:0; transform:translate(-50%, 8px)} to{ opacity:1; transform:translate(-50%, 0)} }
 
     /* ======= PORTFOLIO STYLES (original) ======= */
     .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(10px); background:var(--header-bg); border-bottom:1px solid var(--header-border); transition:background var(--dur-1) var(--ease-1),border-color var(--dur-1) var(--ease-1)}
     .header[data-scrolled="true"]{background:var(--header-bg-solid); border-bottom-color:var(--header-border-strong)}
     .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px; cursor:pointer}
     .logo i{background:linear-gradient(135deg,var(--gradA),var(--gradB)); -webkit-background-clip:text; background-clip:text; color:transparent; animation: logoPulse var(--dur-3) var(--ease-2) infinite alternate;}
     @keyframes logoPulse { from { filter: drop-shadow(0 0 0 rgba(102,126,234,0)); transform: translateY(0) } to { filter: drop-shadow(0 6px 16px rgba(102,126,234,.25)); transform: translateY(-1px) } }
     .nav ul{margin-left:auto;display:flex;gap:22px;list-style:none;padding:0}
@@ -275,6 +287,7 @@
       ::view-transition-old(page), ::view-transition-new(page){animation: none !important}
       #welcome{display:none !important}
       #progressScrim{display:none !important}
+      #eggOverlay{display:none !important}
     }
   </style>
 
@@ -326,6 +339,12 @@
       <div class="progress-text"><i class="fa-solid fa-circle-notch fa-spin"></i> Preparing portfolio…</div>
       <div class="progress-bar"><div class="progress-fill"></div></div>
     </div>
+  </div>
+
+  <!-- === EASTER EGG OVERLAY === -->
+  <div id="eggOverlay">
+    <canvas id="eggCanvas"></canvas>
+    <button id="eggButton"><i class="fa-solid fa-arrow-rotate-left"></i> Continue back</button>
   </div>
 
   <!-- ==================== PORTFOLIO ==================== -->
@@ -553,7 +572,6 @@
     function showScrim(){
       if (!scrim) return;
       scrim.classList.add('show');
-      // restart bar animation by replacing node (ensures fresh animation on repeat)
       const bar = scrim.querySelector('.progress-fill');
       if(bar){
         const clone = bar.cloneNode(true);
@@ -566,17 +584,14 @@
       const done = ()=>{ w.style.display='none'; document.body.style.overflow='auto'; scrim.style.display='none'; };
       if (document.startViewTransition && !prefersReduced && !silent){
         document.startViewTransition(()=> w.classList.add('hidden'));
-        setTimeout(done, 840); // slightly longer than CSS to feel complete
+        setTimeout(done, 840);
       } else {
         w.classList.add('hidden');
         setTimeout(done, 840);
       }
     }
-
     enterBtn?.addEventListener('click', ()=> hideWelcome());
     skipOnce?.addEventListener('click', ()=> hideWelcome(true));
-
-    // Auto-advance after dwell unless interaction
     let autoTimer=null;
     if(!prefersReduced){
       autoTimer = setTimeout(()=> hideWelcome(true), 5200);
@@ -585,7 +600,7 @@
       });
     }
 
-    // Welcome parallax + particles (if visible)
+    // Welcome parallax + particles
     if(w){
       const stage = w;
       const bg = w.querySelector('.grid-fx');
@@ -596,7 +611,6 @@
         my = ((e.clientY - r.top)/r.height)*100;
         if(!ticking){ ticking=true; requestAnimationFrame(()=>{ ticking=false; bg?.style.setProperty('--mx', mx+'%'); bg?.style.setProperty('--my', my+'%'); }); }
       }, {passive:true});
-
       const c = document.getElementById('pfx');
       const ctx = c?.getContext('2d');
       function size(){ if(!c) return; c.width = innerWidth * devicePixelRatio; c.height = innerHeight * devicePixelRatio; }
@@ -645,12 +659,8 @@
         metaTheme?.setAttribute('content', '#0b0b12');
       }
     }
-
-    // Apply system preference on first load (default dark if API missing)
     const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     setThemeTokens(systemDark ? 'dark' : 'light');
-
-    // Toggle (no remember/persistence; session-only)
     themeToggle?.addEventListener('click', ()=>{
       const current = root.getAttribute('data-theme') || (systemDark ? 'dark' : 'light');
       const next = current === 'dark' ? 'light' : 'dark';
@@ -726,6 +736,140 @@
 
     // ========= YEAR =========
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ========= EASTER EGG: triple-click logo → bouncing balls =========
+    const eggOverlay = document.getElementById('eggOverlay');
+    const eggCanvas = document.getElementById('eggCanvas');
+    const eggBtn = document.getElementById('eggButton');
+    const logoEl = document.querySelector('.logo');
+    let clickTimes = [];
+
+    function within(ms) {
+      const now = performance.now();
+      clickTimes = clickTimes.filter(t => now - t < ms);
+      return clickTimes.length;
+    }
+
+    logoEl?.addEventListener('click', (e)=>{
+      clickTimes.push(performance.now());
+      if (within(600) >= 3) { // triple click within 600ms
+        clickTimes = [];
+        launchEggFromElement(logoEl);
+      }
+    });
+
+    function launchEggFromElement(el){
+      if(!eggOverlay || !eggCanvas) return;
+      eggOverlay.style.display = 'block';
+      eggBtn.style.display = 'none';
+      // Canvas setup
+      const dpr = window.devicePixelRatio || 1;
+      function resize(){
+        eggCanvas.width = innerWidth * dpr;
+        eggCanvas.height = innerHeight * dpr;
+        eggCanvas.style.width = '100%';
+        eggCanvas.style.height = '100%';
+      }
+      resize(); window.addEventListener('resize', resize, {passive:true});
+
+      // Spawn origin = center of logo
+      const rect = el.getBoundingClientRect();
+      const ox = (rect.left + rect.width/2) * dpr;
+      const oy = (rect.top + rect.height/2) * dpr;
+
+      const ctx = eggCanvas.getContext('2d');
+      const colors = [
+        '#ff6b6b','#ffd166','#06d6a0','#4cc9f0','#a78bfa',
+        '#f72585','#b8f2e6','#ffe66d','#fca311','#90be6d'
+      ];
+      const balls = [];
+      const count = Math.min(48, Math.floor(innerWidth/20));
+      for(let i=0;i<count;i++){
+        const ang = (Math.random()*Math.PI*2);
+        const spd = (Math.random()*0.9 + 0.8) * 1.6; // initial impulse
+        const r = (Math.random()*10 + 8) * dpr;
+        balls.push({
+          x: ox, y: oy,
+          vx: Math.cos(ang)*spd* (12 * dpr),
+          vy: Math.sin(ang)*spd* (10 * dpr) - (10 * dpr), // slight upward bias
+          r,
+          color: colors[i % colors.length]
+        });
+      }
+
+      // Physics params
+      const g = 0.6 * dpr;       // gravity
+      const bounce = 0.78;       // restitution
+      const fric = 0.995;        // air friction
+      const wallFric = 0.98;     // horizontal friction on floor
+      const settleVel = 0.12 * dpr;
+      const settleFramesNeeded = 50;
+      let settledFrames = 0;
+      let running = true;
+
+      function step(){
+        if(!running) return;
+        const w = eggCanvas.width, h = eggCanvas.height;
+        ctx.clearRect(0,0,w,h);
+
+        let maxSpeed = 0;
+
+        for(const b of balls){
+          // integrate
+          b.vy += g;
+          b.x += b.vx;
+          b.y += b.vy;
+
+          // walls
+          if(b.x - b.r < 0){ b.x = b.r; b.vx = -b.vx * bounce; b.vy *= wallFric; }
+          if(b.x + b.r > w){ b.x = w - b.r; b.vx = -b.vx * bounce; b.vy *= wallFric; }
+          if(b.y - b.r < 0){ b.y = b.r; b.vy = -b.vy * bounce; b.vx *= wallFric; }
+          if(b.y + b.r > h){ b.y = h - b.r; b.vy = -b.vy * bounce; b.vx *= wallFric; }
+
+          // friction
+          b.vx *= fric; b.vy *= fric;
+
+          // draw
+          const grd = ctx.createRadialGradient(b.x - b.r*0.4, b.y - b.r*0.4, b.r*0.2, b.x, b.y, b.r);
+          grd.addColorStop(0, 'rgba(255,255,255,0.85)');
+          grd.addColorStop(0.35, b.color);
+          grd.addColorStop(1, 'rgba(0,0,0,0.35)');
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+          ctx.fillStyle = grd;
+          ctx.fill();
+
+          const speed = Math.hypot(b.vx, b.vy);
+          if(speed > maxSpeed) maxSpeed = speed;
+        }
+
+        // simple settle detection
+        if(maxSpeed < settleVel){
+          settledFrames++;
+          if(settledFrames >= settleFramesNeeded){
+            running = false;
+            showEggButton();
+            return;
+          }
+        } else {
+          settledFrames = 0;
+        }
+
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    function showEggButton(){
+      eggBtn.style.display = 'inline-flex';
+      eggBtn.onclick = () => {
+        eggOverlay.style.display = 'none';
+        eggBtn.style.display = 'none';
+        // clear canvas for next time
+        const ctx = eggCanvas.getContext('2d');
+        ctx && ctx.clearRect(0,0,eggCanvas.width,eggCanvas.height);
+      };
+    }
   </script>
 </body>
 </html>
