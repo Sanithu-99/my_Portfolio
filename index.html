@@ -9,63 +9,40 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23667eea'/%3E%3Cstop stop-color='%23764ba2' offset='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='60' cy='60' r='56' fill='url(%23g)'/%3E%3Ctext x='50%' y='58%' text-anchor='middle' font-size='64' font-family='Arial' dy='.3em' fill='white'%3ESH%3C/text%3E%3C/svg%3E"/>
+
+  <!-- Open Graph / Twitter -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Sanithu Hulathduwage — Portfolio" />
   <meta property="og:description" content="A Visionary Software engineer turning vision into reality" />
   <meta property="og:image" content="profile.jpg" />
   <meta name="twitter:card" content="summary_large_image"/>
 
-  <!-- THREE.JS for the animatronic character -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
-
   <style>
     :root{
       /* base palette */
-      --bg:#0b0b12; 
-      --text:#e9e9f1; 
-      --muted:#b8b8cf;
-
+      --bg:#0b0b12; --text:#e9e9f1; --muted:#b8b8cf;
       /* surfaces & borders */
-      --surface-1:#121225; 
-      --surface-2:#0f0f1d; 
-      --surface-3:#14142a; 
-      --border:rgba(255,255,255,.08);
-
+      --surface-1:#121225; --surface-2:#0f0f1d; --surface-3:#14142a; --border:rgba(255,255,255,.08);
       /* header */
-      --header-bg: rgba(11,11,18,.35);
-      --header-border: rgba(255,255,255,.06);
-      --header-bg-solid: rgba(11,11,18,.65);
-      --header-border-strong: rgba(255,255,255,.14);
-      --icon: #ffffff;
-
+      --header-bg: rgba(11,11,18,.35); --header-border: rgba(255,255,255,.06);
+      --header-bg-solid: rgba(11,11,18,.65); --header-border-strong: rgba(255,255,255,.14); --icon: #ffffff;
       /* brand */
-      --gradA:#667eea; 
-      --gradB:#764ba2; 
-      --accent:#88ffdd; 
-      --accent2:#ffd166; 
-
+      --gradA:#667eea; --gradB:#764ba2; --accent:#88ffdd; --accent2:#ffd166;
       --shadow:0 20px 40px rgba(0,0,0,.35);
-
       /* motion tokens */
-      --dur-1: 220ms;
-      --dur-2: 420ms;
-      --dur-3: 900ms;
+      --dur-1: 220ms; --dur-2: 420ms; --dur-3: 900ms;
       --ease-1: cubic-bezier(.2,.8,.2,1);
       --ease-2: cubic-bezier(.16,1,.3,1);
       --ease-spring: cubic-bezier(.2, .65, .2, 1.2);
-
-      /* mobile tuning */
+      /* misc */
       --radius: 18px;
     }
-
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
-      margin:0;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: pan-y pinch-zoom;
+      margin:0; -webkit-tap-highlight-color: transparent; touch-action: pan-y pinch-zoom;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--text); 
+      color:var(--text);
       background:
         radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%),
         radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%),
@@ -74,61 +51,73 @@
       view-transition-name: page;
     }
     a{color:inherit; text-decoration: none}
+    img{max-width:100%; display:block}
 
-    /* smoother animation on mobile/touch */
-    .themed,
-    body,
-    .header,
-    .card,
-    .stat,
-    .proj,
-    .tag,
-    .chip,
-    input, textarea,
-    .btn,
-    .kpi,
-    .quote {
-      transition:
-        background-color var(--dur-2) var(--ease-1),
-        color var(--dur-2) var(--ease-1),
-        border-color var(--dur-2) var(--ease-1),
-        box-shadow var(--dur-1) var(--ease-1),
-        transform var(--dur-1) var(--ease-1);
+    /* shared transitions */
+    .themed, body, .header, .card, .stat, .proj, .tag, .chip, input, textarea, .btn, .kpi, .quote {
+      transition: background-color var(--dur-2) var(--ease-1), color var(--dur-2) var(--ease-1), border-color var(--dur-2) var(--ease-1), box-shadow var(--dur-1) var(--ease-1), transform var(--dur-1) var(--ease-1);
       will-change: transform, box-shadow;
       transform: translateZ(0);
     }
 
-    /* Header */
-    .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(10px); background:var(--header-bg); border-bottom:1px solid var(--header-border); transition:background var(--dur-1) var(--ease-1),border-color var(--dur-1) var(--ease-1)}
-    .header[data-scrolled="true"]{background:var(--header-bg-solid); border-bottom-color:var(--header-border-strong)}
-    .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
-    .logo i{background:linear-gradient(135deg,var(--gradA),var(--gradB)); -webkit-background-clip:text; background-clip:text; color:transparent;
-      animation: logoPulse var(--dur-3) var(--ease-2) infinite alternate;
+    /* ===== Welcome / Intro ===== */
+    .intro{
+      position:fixed; inset:0; z-index:999; display:grid; place-items:center;
+      background: radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.2), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.18), transparent 60%), #08080f;
+      color:#fff; overflow:hidden;
     }
-    @keyframes logoPulse {
-      from { filter: drop-shadow(0 0 0 rgba(102,126,234,0)); transform: translateY(0) }
-      to   { filter: drop-shadow(0 6px 16px rgba(102,126,234,.25)); transform: translateY(-1px) }
+    .intro__wrap{display:grid; gap:18px; place-items:center; text-align:center; padding:28px}
+    .intro__logo{font-weight:900; letter-spacing:.4px; font-size:clamp(1rem,1.8vw,1.1rem); opacity:.85}
+    .intro__title{font-size: clamp(2rem, 8vw, 5.2rem); line-height:.95; margin:0;
+      background:linear-gradient(120deg,var(--gradA),var(--gradB),var(--gradA));
+      -webkit-background-clip:text; background-clip:text; color:transparent; background-size:200% 200%; animation: shimmer 7s ease-in-out infinite;
     }
-
-    .nav ul{margin-left:auto;display:flex;gap:22px;list-style:none;padding:0}
-    .nav a{opacity:.85;text-decoration:none;font-weight:600; position:relative}
-    .nav a::after{
-      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
-      background: linear-gradient(90deg,var(--gradA),var(--gradB));
-      transform: scaleX(0); transform-origin:left; transition: transform var(--dur-1) var(--ease-1);
-    }
-    .nav a:hover,.nav a:focus{opacity:1}
-    .nav a:hover::after,.nav a:focus::after{ transform: scaleX(1) }
-
+    .intro__subtitle{color:#cdd; max-width:720px}
+    .intro__cta{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:10px}
     .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1.05rem;border-radius:999px;border:1px solid var(--border);font-weight:700;background:transparent}
     .btn.primary{background:linear-gradient(135deg,var(--gradA),var(--gradB));border:none;color:white}
     .btn:hover{transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.25)}
     .btn:active{transform: translateY(0)}
     .btn:focus-visible{outline: 2px solid var(--accent); outline-offset: 2px}
+    .btn--magnetic{position:relative; overflow:hidden}
+    .btn--magnetic span{position:relative; z-index:2}
+    .btn--magnetic::after{
+      content:""; position:absolute; inset:auto 50% -120% 50%; aspect-ratio:1/1;
+      background: radial-gradient(circle at center, rgba(255,255,255,.25), transparent 50%);
+      border-radius:50%; transform:translate(-50%,-50%); transition: transform .2s var(--ease-1);
+      z-index:1; pointer-events:none;
+    }
+
+    @keyframes shimmer { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+    /* Skip intro */
+    .intro__skip{position:fixed; right:14px; bottom:12px; opacity:.7}
+    .intro[hidden]{display:none}
+
+    /* ===== Header ===== */
+    .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(10px); background:var(--header-bg); border-bottom:1px solid var(--header-border)}
+    .header[data-scrolled="true"]{background:var(--header-bg-solid); border-bottom-color:var(--header-border-strong)}
+    .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+    .logo i{background:linear-gradient(135deg,var(--gradA),var(--gradB)); -webkit-background-clip:text; background-clip:text; color:transparent; animation: logoPulse var(--dur-3) var(--ease-2) infinite alternate;}
+    @keyframes logoPulse { from { filter: drop-shadow(0 0 0 rgba(102,126,234,0)); transform: translateY(0) } to { filter: drop-shadow(0 6px 16px rgba(102,126,234,.25)); transform: translateY(-1px) } }
+    .nav ul{margin-left:auto;display:flex;gap:22px;list-style:none;padding:0}
+    .nav a{opacity:.85;text-decoration:none;font-weight:600; position:relative}
+    .nav a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background: linear-gradient(90deg,var(--gradA),var(--gradB)); transform: scaleX(0); transform-origin:left; transition: transform var(--dur-1) var(--ease-1)}
+    .nav a:hover,.nav a:focus{opacity:1}
+    .nav a:hover::after,.nav a:focus::after{ transform: scaleX(1) }
+    .nav a[aria-current="true"]{opacity:1}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
     .theme-toggle{border:none;background:transparent;font-size:1.25rem;cursor:pointer;color:var(--icon); padding:.5rem; border-radius:12px}
 
-    /* Hero */
+    /* ===== Progress Bar ===== */
+    .progress{
+      position:fixed; top:0; left:0; right:0; height:3px; z-index:60; pointer-events:none; 
+      background: linear-gradient(90deg, var(--gradA), var(--gradB));
+      transform-origin: 0 50%; transform: scaleX(0);
+    }
+
+    /* ===== Hero ===== */
     .hero{position:relative;min-height:92vh;display:grid;place-items:center;padding:120px 20px 60px;overflow:hidden}
     .grid-bg{
       position:absolute;inset:-10%;
@@ -141,57 +130,32 @@
     }
     .hero-inner{max-width:1100px;margin:auto;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
     .title{font-size:clamp(2.2rem,6vw,4rem);line-height:1.05;margin:0 0 14px}
-    .title .grad{
-      background:linear-gradient(120deg,var(--gradA),var(--gradB),var(--gradA));
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-      background-size: 200% 200%;
-      animation: shimmer 6s ease-in-out infinite;
-    }
-    @keyframes shimmer {
-      0% { background-position: 0% 50% }
-      50%{ background-position: 100% 50% }
-      100%{ background-position: 0% 50% }
-    }
+    .title .grad{background:linear-gradient(120deg,var(--gradA),var(--gradB),var(--gradA)); -webkit-background-clip:text;background-clip:text;color:transparent; background-size: 200% 200%; animation: shimmer 6s ease-in-out infinite}
     .subtitle{font-size:clamp(1rem,2.8vw,1.25rem);color:var(--muted)}
     .badges{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 26px}
     .chip{padding:.5rem .8rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--border);font-weight:600; backdrop-filter: blur(6px)}
     .chip:hover{transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,0,0,.25)}
-
     .portrait{position:relative;isolation:isolate;perspective: 1000px}
-    .portrait .frame{
-      aspect-ratio:1/1;border-radius:24px; background:linear-gradient(135deg,rgba(102,126,234,.22),rgba(118,75,162,.22));
-      border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden;
-      transform: rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg)); transform-style: preserve-3d; transition: transform var(--dur-1) var(--ease-1);
-      will-change: transform;
-    }
+    .portrait .frame{aspect-ratio:1/1;border-radius:24px; background:linear-gradient(135deg,rgba(102,126,234,.22),rgba(118,75,162,.22)); border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden; transform: rotateX(var(--tx,0deg)) rotateY(var(--ty,0deg)); transform-style: preserve-3d; transition: transform var(--dur-1) var(--ease-1); will-change: transform}
     .portrait img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.05)}
     .floating{position:absolute;inset:auto -18px -18px auto;background:rgba(255,255,255,.06);border:1px solid var(--border);backdrop-filter:blur(8px);padding:.7rem 1rem;border-radius:14px;font-weight:700; transform: translateZ(30px)}
 
-    /* Animatronic character canvas container */
-    .bot-wrap{position:relative; height: 380px; border-radius: 18px; overflow:hidden; border:1px solid var(--border); background: radial-gradient(80% 60% at 50% 20%, rgba(255,255,255,.06), transparent 70%)}
-    canvas#bot{display:block; width:100%; height:100%}
-    .bot-cta{position:absolute; right:8px; bottom:8px; display:flex; gap:8px}
-
-    /* Sections */
+    /* ===== Sections ===== */
     .section{padding:80px 20px}
     .container{max-width:1200px;margin:auto}
     .section h2{font-size:clamp(1.6rem,4.5vw,2.2rem);margin:0 0 28px;background:linear-gradient(135deg,var(--gradA),var(--gradB));-webkit-background-clip:text;background-clip:text;color:transparent}
-
     .about{display:grid;grid-template-columns:1.1fr 1fr;gap:34px}
     .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow)}
     .card:hover{transform: translateY(-4px)}
-    .card[data-reveal]{opacity:0; transform: translateY(16px);}
-
+    .card[data-reveal]{opacity:0; transform: translateY(16px)}
     .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
     .stat{padding:16px;border-radius:14px;background:var(--surface-1);border:1px solid var(--border)}
     .stat:hover{transform: translateY(-2px)}
     .stat h3{margin:0;font-size:1.4rem}
     .stat p{margin:6px 0 0;color:var(--muted);font-weight:600}
-
     .skills{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .pillwrap{display:flex;flex-wrap:wrap;gap:8px}
     .pill{padding:.45rem .75rem;border-radius:999px;background:rgba(102,126,234,.22);border:1px solid rgba(102,126,234,.25);font-weight:700}
-
     .timeline{position:relative;padding-left:26px}
     .timeline::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--gradA),transparent)}
     .titem{position:relative;margin:0 0 20px}
@@ -200,15 +164,15 @@
     .trole{font-weight:800}
     .tmeta{color:var(--muted);font-weight:600}
 
+    /* ===== Projects & Filters ===== */
+    .projects-toolbar{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:14px}
+    .projects-toolbar input{min-width:220px}
+    .projects-toolbar .tag{cursor:pointer}
     .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .proj{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--surface-1);display:flex;flex-direction:column;box-shadow:var(--shadow); transform: translateZ(0)}
     .proj:hover{transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,.35)}
     .thumb{position:relative;aspect-ratio:16/9;display:grid;place-items:center;background:linear-gradient(135deg,var(--gradA),var(--gradB))}
-    .thumb::after{
-      content:""; position:absolute; inset:0;
-      background: radial-gradient(60% 60% at 50% 40%, rgba(255,255,255,.15), transparent 60%);
-      mix-blend-mode: screen; opacity:.65; transition: opacity var(--dur-1) var(--ease-1)
-    }
+    .thumb::after{content:""; position:absolute; inset:0; background: radial-gradient(60% 60% at 50% 40%, rgba(255,255,255,.15), transparent 60%); mix-blend-mode: screen; opacity:.65; transition: opacity var(--dur-1) var(--ease-1)}
     .proj:hover .thumb::after{opacity:.9}
     .thumb i{font-size:44px;color:white;opacity:.95}
     .pbody{padding:18px}
@@ -216,31 +180,37 @@
     .pdesc{color:var(--muted)}
     .tags{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
     .tag{background:var(--surface-2);border:1px solid var(--border);padding:.35rem .6rem;border-radius:999px;font-weight:700}
-
     .plinks{display:flex;gap:12px;margin-top:auto;padding:0 18px 18px}
     .plinks a{display:inline-flex;align-items:center;gap:8px;font-weight:800}
     .plinks a:hover{transform: translateY(-2px)}
 
+    /* ===== Modal (Case Study) ===== */
+    .modal{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.55); z-index:90; padding:20px}
+    .modal[open]{display:grid}
+    .modal__dialog{max-width:960px; width:100%; background:var(--surface-1); border:1px solid var(--border); border-radius:18px; box-shadow: var(--shadow); overflow:hidden}
+    .modal__hd{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border)}
+    .modal__bd{padding:16px; max-height:70vh; overflow:auto}
+    .modal__close{border:none; background:transparent; font-size:1.2rem; color:var(--text); cursor:pointer}
+    .trap-sentinel{width:1px;height:1px;overflow:hidden; position:absolute; left:-9999px}
+
+    /* ===== Case study block ===== */
     .case{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:stretch}
     .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     .kpi{background:var(--surface-1);padding:14px;border:1px solid var(--border);border-radius:14px}
     .kpi h4{margin:0 0 4px}
 
+    /* ===== Testimonials / Contact / Footer ===== */
     .testis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     .quote{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--border); border-radius:var(--radius); padding:20px}
-
     .contact{display:grid;grid-template-columns:1fr .9fr;gap:22px}
     form{display:grid;gap:12px}
     input,textarea{background:var(--surface-2);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:12px;font:inherit}
     input:focus, textarea:focus{outline:2px solid var(--accent); outline-offset: 2px}
     textarea{min-height:120px;resize:vertical}
-
     .footer{padding:36px 20px;border-top:1px solid rgba(255,255,255,.06);color:var(--muted);text-align:center}
     .muted{color:var(--muted)}
-    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
 
-    /* ======= Responsive polish ======= */
+    /* ===== Responsive ===== */
     @media (max-width: 980px){
       .hero{min-height: 80vh; padding: 100px 16px 40px}
       .hero-inner{grid-template-columns:1fr;gap:28px}
@@ -262,7 +232,6 @@
       .kpi{padding:12px}
       .card{padding:18px}
       .grid-2{grid-template-columns:1fr}
-      .bot-wrap{height: 300px}
     }
     @media (max-width: 400px){
       .title{font-size: clamp(1.9rem, 9vw, 2.4rem)}
@@ -271,35 +240,16 @@
       .btn{padding:.75rem 1rem}
     }
 
-    /* View Transitions: soften theme switch */
-    ::view-transition-old(page),
-    ::view-transition-new(page){
-      animation-duration: var(--dur-2);
-      animation-timing-function: var(--ease-2);
-    }
-
-    /* Touch devices: soften hover lifts */
-    @media (hover: none){
-      .btn:hover, .proj:hover, .card:hover, .chip:hover, .pill:hover { transform: translateY(-1px) }
-    }
+    /* View Transitions duration */
+    ::view-transition-old(page), ::view-transition-new(page){ animation-duration: var(--dur-2); animation-timing-function: var(--ease-2) }
 
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
       html{scroll-behavior:auto}
       .reveal,[data-reveal]{opacity:1 !important; transform:none !important; animation:none !important}
       .grid-bg,.portrait .frame,.btn,.proj,.card,.chip,.pill{transition:none !important}
-      ::view-transition-old(page),
-      ::view-transition-new(page){animation: none !important}
+      ::view-transition-old(page), ::view-transition-new(page){animation: none !important}
     }
-
-    /* magnetic hover for buttons */
-    .magnet{position:relative; overflow:visible}
-    .magnet span{display:inline-block}
-      /* Ghost button styling for contrast on dark */
-    .btn.ghost{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--text); backdrop-filter: blur(6px)}
-    .btn.ghost:hover{background:rgba(255,255,255,.1)}
-    /* Ensure bot controls sit above the canvas */
-    .bot-cta{z-index:2}
   </style>
 
   <!-- JSON-LD -->
@@ -320,10 +270,28 @@
   </script>
 </head>
 <body class="themed">
+  <!-- Progress Bar -->
+  <div class="progress" id="progressBar"></div>
+
+  <!-- ===== Intro / Welcome Screen ===== -->
+  <aside class="intro" id="intro" aria-labelledby="introTitle">
+    <div class="intro__wrap">
+      <div class="intro__logo">SANITHU • FOUNDER • ENGINEER • DESIGNER</div>
+      <h1 class="intro__title" id="introTitle">Crafting Outcomes</h1>
+      <p class="intro__subtitle">I build delightful, secure, and scalable software — where taste meets engineering. Ready to step inside?</p>
+      <div class="intro__cta">
+        <button class="btn primary btn--magnetic" id="enterBtn"><i class="fa-solid fa-bolt"></i><span>Enter Portfolio</span></button>
+        <button class="btn" id="skipIntroBtn" aria-label="Skip intro">Skip</button>
+      </div>
+    </div>
+    <button class="btn intro__skip" id="skipIntroBtn2" aria-label="Skip intro quick"><i class="fa-solid fa-forward"></i> Skip</button>
+  </aside>
+
+  <!-- ===== Header ===== -->
   <header class="header themed" aria-label="Primary" id="siteHeader">
     <nav class="nav">
       <a class="logo" href="#home" aria-label="Go to home"><i class="fa-solid fa-bolt fa-lg"></i> <span>Sanithu</span></a>
-      <ul>
+      <ul id="primaryNav">
         <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#experience">Experience</a></li>
@@ -331,12 +299,13 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
       <div class="grid-2" style="gap:8px;align-items:center">
-        <a class="btn ghost themed magnet" href="#resume"><i class="fa-solid fa-file-arrow-down"></i><span>Resume</span></a>
+        <a class="btn ghost themed btn--magnetic" href="#resume"><i class="fa-solid fa-file-arrow-down"></i><span>Resume</span></a>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fa-solid fa-circle-half-stroke"></i></button>
       </div>
     </nav>
   </header>
 
+  <!-- ===== Main ===== -->
   <main id="home" class="hero themed">
     <div class="grid-bg" aria-hidden="true"></div>
     <div class="hero-inner">
@@ -351,13 +320,13 @@
           <span class="chip themed">Automation</span>
         </div>
         <div class="cta">
-          <a class="btn primary magnet" href="#projects"><i class="fa-solid fa-rocket"></i> <span>View Projects</span></a>
-          <a class="btn ghost themed magnet" href="#contact"><i class="fa-solid fa-handshake-angle"></i> <span>Collaborate</span></a>
+          <a class="btn primary btn--magnetic" href="#projects"><i class="fa-solid fa-rocket"></i> <span>View Projects</span></a>
+          <a class="btn ghost themed btn--magnetic" href="#contact"><i class="fa-solid fa-handshake-angle"></i> <span>Collaborate</span></a>
         </div>
       </section>
       <aside class="portrait">
         <div class="frame"><img src="profile.jpg" alt="Portrait of Sanithu" loading="lazy"></div>
-        <div class="floating" aria-hidden="true">Currently: Building an AI System⚡</div>
+        <div class="floating" aria-hidden="true">Currently: Building an AI System ⚡</div>
       </aside>
     </div>
   </main>
@@ -382,13 +351,6 @@
           <li class="titem" data-reveal><div class="trole">IT Technician — Midwestern State University</div><div class="tmeta">2022–2023 • 95% first-contact resolution</div></li>
           <li class="titem" data-reveal><div class="trole">Graphic Designer — McCoy’s, Empire Tax</div><div class="tmeta">2024 • Brand uplift & assets</div></li>
         </ul>
-        <div class="bot-wrap" aria-label="Animatronic assistant: Byte">
-          <canvas id="bot"></canvas>
-          <div class="bot-cta">
-            <button class="btn ghost themed" id="botWave"><i class="fa-solid fa-hands"></i> Wave</button>
-            <button class="btn ghost themed" id="botDance"><i class="fa-solid fa-music"></i> Dance</button>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -450,8 +412,21 @@
   <section id="projects" class="section">
     <div class="container">
       <h2>Featured Projects</h2>
-      <div class="projects">
-        <article class="proj themed" data-reveal>
+
+      <!-- Filters / Search -->
+      <div class="projects-toolbar">
+        <div class="tags" role="group" aria-label="Project filters">
+          <button class="tag themed" data-filter="all" aria-pressed="true">All</button>
+          <button class="tag themed" data-filter="ai">AI</button>
+          <button class="tag themed" data-filter="web">Web</button>
+          <button class="tag themed" data-filter="security">Security</button>
+        </div>
+        <input class="themed" id="projectSearch" placeholder="Search projects… (e.g., finance, AES)" aria-label="Search projects">
+      </div>
+
+      <div class="projects" id="projectGrid">
+        <!-- Project 1 -->
+        <article class="proj themed" data-reveal data-tags="web security">
           <div class="thumb"><i class="fa-solid fa-wallet"></i></div>
           <div class="pbody">
             <h3>Hum Cash — Personalized Finance App</h3>
@@ -460,11 +435,51 @@
           </div>
           <div class="plinks">
             <a href="https://github.com/Sanithu-99/hum-cash" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Code</a>
+            <a href="#" data-case="humcash" class="open-case"><i class="fa-solid fa-up-right-from-square"></i> Case</a>
           </div>
         </article>
-        
-        <!-- Add more projects here as needed -->
+
+        <!-- Sample additional (duplicate style; tweak as you add real projects) -->
+        <article class="proj themed" data-reveal data-tags="ai web">
+          <div class="thumb"><i class="fa-solid fa-brain"></i></div>
+          <div class="pbody">
+            <h3>Velant.ai — CRM for Behavioral Health</h3>
+            <p class="pdesc">Real-time leads, HIPAA-conscious telephony, AI summaries, and outcome-focused UX.</p>
+            <div class="tags"><span class="tag themed">React</span><span class="tag themed">NestJS</span><span class="tag themed">PostgreSQL</span><span class="tag themed">Auth0</span></div>
+          </div>
+          <div class="plinks">
+            <a href="#" data-case="velant" class="open-case"><i class="fa-solid fa-up-right-from-square"></i> Case</a>
+          </div>
+        </article>
+
+        <article class="proj themed" data-reveal data-tags="web">
+          <div class="thumb"><i class="fa-solid fa-hospital-user"></i></div>
+          <div class="pbody">
+            <h3>Briarwood Detox Landing System</h3>
+            <p class="pdesc">High-converting, SEO-first funnels across locations with rock-solid analytics.</p>
+            <div class="tags"><span class="tag themed">Next.js</span><span class="tag themed">SEO</span><span class="tag themed">Analytics</span></div>
+          </div>
+          <div class="plinks">
+            <a href="#" data-case="briarwood" class="open-case"><i class="fa-solid fa-up-right-from-square"></i> Case</a>
+          </div>
+        </article>
       </div>
+
+      <!-- Case modal -->
+      <dialog class="modal" id="caseModal" aria-labelledby="caseTitle" aria-modal="true">
+        <div class="modal__dialog">
+          <div class="modal__hd">
+            <h3 id="caseTitle">Case Study</h3>
+            <button class="modal__close" id="caseClose" aria-label="Close case"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div class="modal__bd" id="caseBody">
+            <!-- injected -->
+          </div>
+        </div>
+        <span class="trap-sentinel" tabindex="0"></span>
+      </dialog>
+
+      <!-- Existing case block retained -->
       <div class="case section" style="padding:0;margin-top:26px">
         <div class="card themed" data-reveal>
           <h3>Case Study: Wearable Technology in Chronic Disease Monitoring</h3>
@@ -482,7 +497,7 @@
             <li>Security & Privacy</li>
             <li>Accuracy</li>
           </ul>
-          <a class="btn primary" href="#contact"><i class="fa-solid fa-comments"></i> Request full write-up</a>
+          <a class="btn primary btn--magnetic" href="#contact"><i class="fa-solid fa-comments"></i> Request full write-up</a>
         </div>
       </div>
     </div>
@@ -502,7 +517,7 @@
     <div class="container">
       <h2>Download My Resume</h2>
       <p class="muted">Prefer the quick version? Grab the PDF — then let’s talk specifics.</p>
-      <a class="btn primary" href="SANITHU_HULATHDUWAGE_RESUME.pdf" download><i class="fa-solid fa-download"></i> Download Resume (PDF)</a>
+      <a class="btn primary btn--magnetic" href="SANITHU_HULATHDUWAGE_RESUME.pdf" download><i class="fa-solid fa-download"></i> <span>Download Resume (PDF)</span></a>
     </div>
   </section>
 
@@ -512,11 +527,11 @@
         <h2>Let’s Work Together</h2>
         <p class="muted">Have something ambitious in mind — AI, Startups or growth? I’ll help you ship it.</p>
         <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px">
-          <a class="btn ghost themed" href="mailto:sanithu.hulathduwage@gmail.com"><i class="fa-solid fa-envelope"></i> Email</a>
-          <a class="btn ghost themed" href="tel:+19407823995"><i class="fa-solid fa-phone"></i> Call</a>
-          <a class="btn ghost themed" target="_blank" rel="noopener" href="https://www.linkedin.com/in/sanithu-hulathduwage/"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-          <a class="btn ghost themed" target="_blank" rel="noopener" href="https://github.com/Sanithu-99/"><i class="fa-brands fa-github"></i> GitHub</a>
-          <a class="btn ghost themed" target="_blank" rel="noopener" href="https://www.instagram.com/sanithu.official"><i class="fa-brands fa-instagram"></i> Instagram</a>
+          <a class="btn ghost themed btn--magnetic" href="mailto:sanithu.hulathduwage@gmail.com"><i class="fa-solid fa-envelope"></i> <span>Email</span></a>
+          <a class="btn ghost themed btn--magnetic" href="tel:+19407823995"><i class="fa-solid fa-phone"></i> <span>Call</span></a>
+          <a class="btn ghost themed btn--magnetic" target="_blank" rel="noopener" href="https://www.linkedin.com/in/sanithu-hulathduwage/"><i class="fa-brands fa-linkedin"></i> <span>LinkedIn</span></a>
+          <a class="btn ghost themed btn--magnetic" target="_blank" rel="noopener" href="https://github.com/Sanithu-99/"><i class="fa-brands fa-github"></i> <span>GitHub</span></a>
+          <a class="btn ghost themed btn--magnetic" target="_blank" rel="noopener" href="https://www.instagram.com/sanithu.official"><i class="fa-brands fa-instagram"></i> <span>Instagram</span></a>
         </div>
       </div>
       <div class="card themed" data-reveal>
@@ -528,7 +543,7 @@
           <input class="themed" id="email" name="email" type="email" placeholder="Email" required>
           <label class="sr-only" for="message">Message</label>
           <textarea class="themed" id="message" name="message" placeholder="What are we building?" required></textarea>
-          <button class="btn primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          <button class="btn primary btn--magnetic" type="submit"><i class="fa-solid fa-paper-plane"></i> <span>Send</span></button>
           <p id="formStatus" class="muted" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -540,157 +555,290 @@
   </footer>
 
   <script>
-    // ========= THEME & VIEW TRANSITIONS =========
-    const themeToggle = document.getElementById('themeToggle');
+    // ===== Utilities =====
+    const $ = (sel, ctx=document)=>ctx.querySelector(sel);
+    const $$ = (sel, ctx=document)=>Array.from(ctx.querySelectorAll(sel));
+    const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    // ===== Theme with View Transitions =====
+    const themeToggle = $('#themeToggle');
     const root = document.documentElement;
     const body = document.body;
     const metaTheme = document.querySelector('meta[name="theme-color"]');
 
-    const setThemeTokens = (mode) => {
+    function setThemeTokens(mode){
       if(mode === 'light'){
-        root.style.setProperty('--bg', '#f7f8fc');
-        root.style.setProperty('--text', '#1a1a1f');
-        root.style.setProperty('--muted', '#56566a');
-        root.style.setProperty('--surface-1', '#ffffff');
-        root.style.setProperty('--surface-2', '#f2f4f8');
-        root.style.setProperty('--surface-3', '#e9ecf3');
-        root.style.setProperty('--border', 'rgba(0,0,0,.08)');
-        root.style.setProperty('--header-bg', 'rgba(255,255,255,.35)');
-        root.style.setProperty('--header-border', 'rgba(0,0,0,.06)');
-        root.style.setProperty('--header-bg-solid', 'rgba(255,255,255,.75)');
-        root.style.setProperty('--header-border-strong', 'rgba(0,0,0,.12)');
-        root.style.setProperty('--icon', '#1a1a1f');
+        root.style.setProperty('--bg', '#f7f8fc'); root.style.setProperty('--text', '#1a1a1f'); root.style.setProperty('--muted', '#56566a');
+        root.style.setProperty('--surface-1', '#ffffff'); root.style.setProperty('--surface-2', '#f2f4f8'); root.style.setProperty('--surface-3', '#e9ecf3'); root.style.setProperty('--border', 'rgba(0,0,0,.08)');
+        root.style.setProperty('--header-bg', 'rgba(255,255,255,.35)'); root.style.setProperty('--header-border', 'rgba(0,0,0,.06)');
+        root.style.setProperty('--header-bg-solid', 'rgba(255,255,255,.75)'); root.style.setProperty('--header-border-strong', 'rgba(0,0,0,.12)'); root.style.setProperty('--icon', '#1a1a1f');
         body.style.background =
           'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.18), transparent 60%), ' +
           'radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.18), transparent 60%), #f7f8fc';
         metaTheme?.setAttribute('content', '#f7f8fc');
       } else {
-        root.style.setProperty('--bg', '#0b0b12');
-        root.style.setProperty('--text', '#e9e9f1');
-        root.style.setProperty('--muted', '#b8b8cf');
-        root.style.setProperty('--surface-1', '#121225');
-        root.style.setProperty('--surface-2', '#0f0f1d');
-        root.style.setProperty('--surface-3', '#14142a');
-        root.style.setProperty('--border', 'rgba(255,255,255,.08)');
-        root.style.setProperty('--header-bg', 'rgba(11,11,18,.35)');
-        root.style.setProperty('--header-border', 'rgba(255,255,255,.06)');
-        root.style.setProperty('--header-bg-solid', 'rgba(11,11,18,.65)');
-        root.style.setProperty('--header-border-strong', 'rgba(255,255,255,.14)');
-        root.style.setProperty('--icon', '#ffffff');
+        root.style.setProperty('--bg', '#0b0b12'); root.style.setProperty('--text', '#e9e9f1'); root.style.setProperty('--muted', '#b8b8cf');
+        root.style.setProperty('--surface-1', '#121225'); root.style.setProperty('--surface-2', '#0f0f1d'); root.style.setProperty('--surface-3', '#14142a'); root.style.setProperty('--border', 'rgba(255,255,255,.08)');
+        root.style.setProperty('--header-bg', 'rgba(11,11,18,.35)'); root.style.setProperty('--header-border', 'rgba(255,255,255,.06)');
+        root.style.setProperty('--header-bg-solid', 'rgba(11,11,18,.65)'); root.style.setProperty('--header-border-strong', 'rgba(255,255,255,.14)'); root.style.setProperty('--icon', '#ffffff');
         body.style.background =
           'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%), ' +
           'radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%), #0b0b12';
         metaTheme?.setAttribute('content', '#0b0b12');
       }
-    };
-
-    const applyTheme = (mode) => {
-      document.documentElement.setAttribute('data-theme', mode);
-      setThemeTokens(mode);
-      localStorage.setItem('theme', mode);
-    };
-
+    }
+    function applyTheme(mode){ document.documentElement.setAttribute('data-theme', mode); setThemeTokens(mode); localStorage.setItem('theme', mode); }
     const saved = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyTheme(saved || (systemPrefersDark ? 'dark' : 'light'));
-
     themeToggle.addEventListener('click', ()=>{
       const current = localStorage.getItem('theme') || (systemPrefersDark ? 'dark' : 'light');
       const next = current === 'dark' ? 'light' : 'dark';
-      if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.startViewTransition(() => applyTheme(next));
-      } else {
-        applyTheme(next);
-      }
+      if (document.startViewTransition && !prefersReduced) document.startViewTransition(()=>applyTheme(next));
+      else applyTheme(next);
     });
 
-    // ========= HEADER SCROLL STATE =========
+    // ===== Header scroll + progress bar =====
     const header = document.getElementById('siteHeader');
-    const setScrolled = () => {
-      header.setAttribute('data-scrolled', window.scrollY > 8 ? 'true' : 'false');
-    };
+    const progressBar = document.getElementById('progressBar');
+    function setScrolled(){ header.setAttribute('data-scrolled', window.scrollY > 8 ? 'true' : 'false'); }
     setScrolled();
-    window.addEventListener('scroll', setScrolled, {passive:true});
+    window.addEventListener('scroll', ()=>{
+      setScrolled();
+      const h = document.documentElement;
+      const progress = h.scrollTop / (h.scrollHeight - h.clientHeight);
+      progressBar.style.transform = `scaleX(${progress})`;
+    }, {passive:true});
 
-    // ========= STAGGERED REVEAL ON SCROLL =========
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // ===== Intro / Welcome =====
+    const intro = document.getElementById('intro');
+    const enterBtn = document.getElementById('enterBtn');
+    const skipIntroBtn = document.getElementById('skipIntroBtn');
+    const skipIntroBtn2 = document.getElementById('skipIntroBtn2');
+
+    const INTRO_KEY = 'introSeenV1';
+    const seenIntro = localStorage.getItem(INTRO_KEY) === '1';
+
+    function closeIntro(withIris=true){
+      localStorage.setItem(INTRO_KEY, '1');
+      if(prefersReduced) { intro.hidden = true; return; }
+      if(withIris && document.startViewTransition){
+        // Radial "iris" reveal
+        const x = window.innerWidth/2, y = window.innerHeight/2;
+        document.startViewTransition(()=>{
+          intro.hidden = true;
+        }).ready.then(()=>{
+          const end = Math.hypot(Math.max(x, innerWidth-x), Math.max(y, innerHeight-y));
+          document.documentElement.animate(
+            { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
+            { duration: 900, easing: 'cubic-bezier(.16,1,.3,1)', pseudoElement: '::view-transition-new(page)' }
+          );
+        });
+      } else {
+        // Fallback fade
+        intro.animate([{opacity:1}, {opacity:0}], {duration:500, fill:'forwards', easing:'ease-out'}).onfinish = ()=> intro.hidden = true;
+      }
+    }
+    function openIntro(){
+      intro.hidden = false;
+      if(prefersReduced) return;
+      intro.animate([{opacity:0}, {opacity:1}], {duration:400, easing:'ease-out'});
+    }
+
+    if(!seenIntro) openIntro(); else intro.hidden = true;
+    [enterBtn, skipIntroBtn, skipIntroBtn2].forEach(b=> b?.addEventListener('click', ()=>closeIntro(true)));
+
+    // Magnetic buttons
+    $$('.btn--magnetic').forEach(btn=>{
+      btn.addEventListener('pointermove', e=>{
+        const r = btn.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width/2);
+        const dy = e.clientY - (r.top + r.height/2);
+        if(btn.animate && !prefersReduced){
+          btn.animate({ transform: [`translate(0,0)`, `translate(${dx*0.05}px,${dy*0.05}px)`] }, {duration: 150, fill:'forwards'});
+          btn.style.setProperty('--mx', dx); btn.style.setProperty('--my', dy);
+        }
+        const after = getComputedStyle(btn, '::after');
+        btn.style.setProperty('--hover-x', e.clientX - r.left + 'px');
+        btn.style.setProperty('--hover-y', e.clientY - r.top + 'px');
+        btn.style.setProperty('--hover', 1);
+        btn.style.setProperty('--dx', dx); btn.style.setProperty('--dy', dy);
+      });
+      btn.addEventListener('pointerleave', ()=>{
+        if(btn.animate && !prefersReduced) btn.animate({ transform: [`translate(var(--dx,0),var(--dy,0))`, `translate(0,0)`] }, {duration: 180, fill:'forwards'});
+      });
+    });
+
+    // ===== Hero Parallax + Tilt =====
+    const hero = document.querySelector('.hero');
+    const bg = document.querySelector('.grid-bg');
+    const portraitFrame = document.querySelector('.portrait .frame');
+    const small = window.matchMedia('(max-width: 740px)').matches;
+    const PARALLAX_DEG = small ? 3 : 6;
+    const LERP = small ? 0.10 : 0.12;
+    const lerp = (a,b,t)=>a+(b-a)*t;
+    let mx=50,my=50,tx=0,ty=0,ticking=false;
+
+    function updateParallax(){
+      ticking=false;
+      bg?.style.setProperty('--mx', `${mx}%`);
+      bg?.style.setProperty('--my', `${my}%`);
+      portraitFrame?.style.setProperty('--tx', `${tx}deg`);
+      portraitFrame?.style.setProperty('--ty', `${ty}deg`);
+    }
+    function onMove(e){
+      const rect = hero.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      mx = lerp(mx, x*100, LERP); my = lerp(my, y*100, LERP);
+      ty = lerp(ty, (x - 0.5) * PARALLAX_DEG, LERP);
+      tx = lerp(tx, -(y - 0.5) * PARALLAX_DEG, LERP);
+      if(!ticking){ ticking = true; requestAnimationFrame(updateParallax); }
+    }
+    if(!prefersReduced){
+      hero?.addEventListener('pointermove', onMove, {passive:true});
+      hero?.addEventListener('pointerleave', ()=>{
+        mx=50; my=50; tx=0; ty=0;
+        if(!ticking){ ticking=true; requestAnimationFrame(updateParallax); }
+      }, {passive:true});
+    }
+
+    // ===== Scroll reveal =====
     if(!prefersReduced){
       const obs = new IntersectionObserver((entries)=>{
         for(const e of entries){
           if(e.isIntersecting){
             const i = Number(e.target.getAttribute('data-stagger') || 0);
-            e.target.animate(
-              [
-                {opacity:0, transform:'translateY(18px) scale(.98)'},
-                {opacity:1, transform:'translateY(0) scale(1)'}
-              ],
-              {duration: 520, delay: i*60, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards'}
-            );
-            e.target.removeAttribute('data-reveal');
-            obs.unobserve(e.target);
+            e.target.animate([{opacity:0, transform:'translateY(18px) scale(.98)'},{opacity:1, transform:'translateY(0) scale(1)'}], {duration: 520, delay: i*60, easing:'cubic-bezier(.2,.8,.2,1)', fill:'forwards'});
+            e.target.removeAttribute('data-reveal'); obs.unobserve(e.target);
           }
         }
       }, {threshold:.12});
-
       document.querySelectorAll('[data-reveal]').forEach((container)=>{
-        let idx = 0;
+        let idx=0;
         container.querySelectorAll('[data-reveal], .titem, .stat, .proj, .card, .quote').forEach(el=>{
-          if(!el.hasAttribute('data-stagger')){
-            el.setAttribute('data-stagger', idx++);
-          }
+          if(!el.hasAttribute('data-stagger')) el.setAttribute('data-stagger', idx++);
           obs.observe(el);
         });
         obs.observe(container);
       });
     }
 
-    // ========= HERO PARALLAX + TILT =========
-    const hero = document.querySelector('.hero');
-    const bg = document.querySelector('.grid-bg');
-    const portraitFrame = document.querySelector('.portrait .frame');
+    // ===== Nav scroll spy =====
+    const sections = ['home','about','skills','experience','projects','contact'].map(id=>document.getElementById(id));
+    const navLinks = $$('#primaryNav a');
+    const spy = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const id = entry.target.id;
+          navLinks.forEach(a=>a.setAttribute('aria-current', a.getAttribute('href') === '#'+id ? 'true' : 'false'));
+        }
+      });
+    }, {rootMargin:'-40% 0px -55% 0px', threshold: 0});
+    sections.forEach(s=>s && spy.observe(s));
 
-    const small = window.matchMedia('(max-width: 740px)').matches;
-    const PARALLAX_DEG = small ? 3 : 6; 
-    const LERP = small ? 0.10 : 0.12;  
+    // ===== Projects: filter + search =====
+    const filterBtns = $$('.projects-toolbar .tag');
+    const searchInput = $('#projectSearch');
+    const projects = $$('#projectGrid .proj');
 
-    const lerp = (a,b,t)=>a+(b-a)*t;
-    let mx = 50, my = 50, tx = 0, ty = 0;
-    let ticking = false;
-
-    function updateParallax(){
-      ticking = false;
-      bg.style.setProperty('--mx', `${mx}%`);
-      bg.style.setProperty('--my', `${my}%`);
-      portraitFrame.style.setProperty('--tx', `${tx}deg`);
-      portraitFrame.style.setProperty('--ty', `${ty}deg`);
+    function applyFilters(){
+      const active = filterBtns.find(b=>b.getAttribute('aria-pressed')==='true')?.dataset.filter || 'all';
+      const q = (searchInput.value||'').toLowerCase();
+      projects.forEach(card=>{
+        const tags = (card.dataset.tags||'').toLowerCase();
+        const text = card.innerText.toLowerCase();
+        const showTag = active==='all' || tags.includes(active);
+        const showSearch = !q || text.includes(q);
+        card.style.display = (showTag && showSearch) ? '' : 'none';
+      });
     }
+    filterBtns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        filterBtns.forEach(b=>b.setAttribute('aria-pressed','false'));
+        btn.setAttribute('aria-pressed','true');
+        applyFilters();
+      });
+    });
+    searchInput.addEventListener('input', applyFilters);
 
-    function onMove(e){
-      const rect = hero.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-      mx = lerp(mx, x*100, LERP);
-      my = lerp(my, y*100, LERP);
-      ty = lerp(ty, (x - 0.5) * PARALLAX_DEG, LERP);
-      tx = lerp(tx, -(y - 0.5) * PARALLAX_DEG, LERP);
-      if(!ticking){
-        ticking = true;
-        requestAnimationFrame(updateParallax);
+    // ===== Case Modal =====
+    const caseModal = $('#caseModal');
+    const caseBody = $('#caseBody');
+    const caseClose = $('#caseClose');
+    const cases = {
+      humcash: `
+        <h4>Hum Cash — Personalized Finance App</h4>
+        <p>Goal: empower users to understand and act on spending trends with privacy-first design.</p>
+        <ul>
+          <li>Stack: Flask API, React client, MySQL, Redis cache.</li>
+          <li>Security: AES-256 at-rest, TLS in transit, role-based scopes.</li>
+          <li>AI: budget anomaly detection + natural-language “money questions”.</li>
+        </ul>
+        <p><strong>Outcome:</strong> 22% faster budgeting flow; 18% reduction in untagged expenses.</p>
+      `,
+      velant: `
+        <h4>Velant.ai — CRM for Behavioral Health</h4>
+        <p>Outcome-driven CRM with integrated telephony, HIPAA-aware workflows, and AI summaries.</p>
+        <ul>
+          <li>Auth0 roles, Supabase/Postgres, Nest microservices, WebRTC-ready layer.</li>
+          <li>Socket-driven live leads; attribution mapping; structured logging.</li>
+          <li>Design system: Chakra UI + custom tokens.</li>
+        </ul>
+      `,
+      briarwood: `
+        <h4>Briarwood Detox Landing System</h4>
+        <p>Location-targeted funnels with SEO & analytics for measurable intake growth.</p>
+        <ul>
+          <li>Next.js ISR, Yoast schema, Core Web Vitals tuned.</li>
+          <li>Server-side event tracking (Ads/Analytics), form/call attribution.</li>
+        </ul>
+      `
+    };
+    function openCase(key){
+      caseBody.innerHTML = cases[key] || '<p>Coming soon.</p>';
+      caseModal.showModal();
+      trapFocus(caseModal);
+      animateModal(caseModal, true);
+    }
+    function closeCase(){
+      animateModal(caseModal, false).onfinish = ()=> caseModal.close();
+    }
+    $$('.open-case').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        openCase(a.dataset.case);
+      });
+    });
+    caseClose.addEventListener('click', closeCase);
+    caseModal.addEventListener('click', (e)=>{ if(e.target === caseModal) closeCase(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && caseModal.open) closeCase(); });
+
+    function animateModal(dialog, opening){
+      if(prefersReduced) return { onfinish: ()=>{} };
+      const dlg = dialog.querySelector('.modal__dialog');
+      if(opening){
+        dlg.animate([{transform:'translateY(12px)', opacity:0},{transform:'translateY(0)', opacity:1}], {duration:220, easing:'var(--ease-1)', fill:'forwards'});
+        return { onfinish: ()=>{} };
+      } else {
+        return dlg.animate([{transform:'translateY(0)', opacity:1},{transform:'translateY(12px)', opacity:0}], {duration:180, easing:'ease-out', fill:'forwards'});
       }
     }
 
-    if(!prefersReduced){
-      hero.addEventListener('pointermove', onMove, {passive:true});
-      hero.addEventListener('pointerleave', ()=>{
-        mx = 50; my = 50; tx = 0; ty = 0;
-        if(!ticking){
-          ticking = true;
-          requestAnimationFrame(updateParallax);
-        }
-      }, {passive:true});
+    // Focus trap
+    function trapFocus(dialog){
+      const focusables = dialog.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
+      const first = focusables[0]; const last = focusables[focusables.length-1];
+      function loop(e){
+        if(e.key !== 'Tab') return;
+        if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+      }
+      dialog.addEventListener('keydown', loop);
+      first?.focus();
     }
 
-    // ========= CONTACT FORM (mailto) =========
+    // ===== Contact form (mailto) =====
     const form = document.getElementById('contactForm');
     form.addEventListener('submit', (e)=>{
       e.preventDefault();
@@ -699,199 +847,42 @@
       const message = form.message.value.trim();
       const status = document.getElementById('formStatus');
       if(!name || !email || !message){ status.textContent = 'Please fill out all fields.'; return; }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ status.textContent = 'Please enter a valid email.'; return; }
       const body = `${message}\n\n— ${name} (${email})`;
       const mailto = `mailto:sanithu.hulathduwage@gmail.com?subject=${encodeURIComponent('Portfolio inquiry from ' + name)}&body=${encodeURIComponent(body)}`;
-      window.location.href = mailto;
+      status.textContent = 'Opening your email app…';
+      location.href = mailto;
     });
 
-    // ========= YEAR =========
+    // ===== Year =====
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ========= MAGNETIC BUTTONS =========
-    const magnets = document.querySelectorAll('.magnet');
-    magnets.forEach(btn=>{
-      const span = btn.querySelector('span');
-      btn.addEventListener('pointermove', (e)=>{
-        const r = btn.getBoundingClientRect();
-        const x = (e.clientX - r.left - r.width/2)/r.width * 14;
-        const y = (e.clientY - r.top - r.height/2)/r.height * 14;
-        span.style.transform = `translate(${x}px, ${y}px)`;
-      });
-      btn.addEventListener('pointerleave', ()=>{ span.style.transform = 'translate(0,0)'; });
+    // ===== Header scrolled state (initial) =====
+    (function initHeader(){ header.setAttribute('data-scrolled', window.scrollY > 8 ? 'true' : 'false'); })();
+
+    // ===== Gentle entrance of hero on first load (after intro) =====
+    if(!seenIntro && !prefersReduced){
+      const heroInner = document.querySelector('.hero-inner');
+      heroInner.style.opacity = 0;
+      const revealHero = ()=> heroInner.animate([{opacity:0, filter:'blur(6px)'},{opacity:1, filter:'blur(0)'}], {duration:550, easing:'var(--ease-2)', fill:'forwards'});
+      enterBtn?.addEventListener('click', ()=> setTimeout(revealHero, 320));
+      skipIntroBtn?.addEventListener('click', ()=> setTimeout(revealHero, 120));
+      skipIntroBtn2?.addEventListener('click', ()=> setTimeout(revealHero, 120));
+    }
+
+    // ===== Smooth keyboard nav for sections =====
+    document.addEventListener('keydown', (e)=>{
+      if(e.metaKey || e.ctrlKey || e.altKey) return;
+      const ids = sections.filter(Boolean).map(s=>s.id);
+      const current = ids.findIndex(id => $('#'+id).getBoundingClientRect().top >= -1 && $('#'+id).getBoundingClientRect().top < innerHeight*0.6);
+      if(e.key === 'ArrowDown' || e.key === 'PageDown'){
+        const next = Math.min(ids.length-1, current+1);
+        if(ids[next]) location.hash = '#'+ids[next];
+      } else if(e.key === 'ArrowUp' || e.key === 'PageUp'){
+        const prev = Math.max(0, current-1);
+        if(ids[prev]) location.hash = '#'+ids[prev];
+      }
     });
-
-    // ========= ANIMATRONIC CHARACTER (BYTE) =========
-    // Built with primitives so no external assets needed.
-    (()=>{
-      const canvas = document.getElementById('bot');
-      if(!canvas || !window.THREE) return;
-
-      const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-      camera.position.set(0, 1.3, 4);
-
-      const light = new THREE.DirectionalLight(0xffffff, 1.2);
-      light.position.set(2,3,4);
-      scene.add(light);
-      scene.add(new THREE.AmbientLight(0xffffff, 0.45));
-
-      // Materials
-      const matBody = new THREE.MeshStandardMaterial({color: 0x667eea, metalness:0.2, roughness:0.35});
-      const matAccent = new THREE.MeshStandardMaterial({color: 0x88ffdd, emissive:0x112233, emissiveIntensity:0.45});
-      const matDark = new THREE.MeshStandardMaterial({color: 0x14142a, metalness:0.1, roughness:0.8});
-
-      // Group root
-      const bot = new THREE.Group();
-      scene.add(bot);
-
-      // Torso
-      const torso = new THREE.Mesh(new THREE.BoxGeometry(1.1,1.2,0.6), matBody);
-      bot.add(torso);
-
-      // Head
-      const head = new THREE.Group();
-      const skull = new THREE.Mesh(new THREE.BoxGeometry(0.8,0.6,0.6), matBody);
-      skull.position.y = 0.9;
-      head.add(skull);
-      const face = new THREE.Mesh(new THREE.BoxGeometry(0.76,0.28,0.02), matDark);
-      face.position.set(0,0.95,0.31);
-      head.add(face);
-      // Eyes
-      const eyeL = new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,0.02, 24), matAccent);
-      const eyeR = eyeL.clone();
-      eyeL.rotation.x = Math.PI/2; eyeR.rotation.x = Math.PI/2;
-      eyeL.position.set(-0.18, 0.96, 0.33);
-      eyeR.position.set( 0.18, 0.96, 0.33);
-      head.add(eyeL, eyeR);
-      bot.add(head);
-
-      // Arms
-      const shoulderY = 0.4;
-      const armL = new THREE.Group();
-      const armR = new THREE.Group();
-      const upperArmGeo = new THREE.CylinderGeometry(0.09,0.09,0.6, 16);
-      const lowerArmGeo = new THREE.CylinderGeometry(0.08,0.08,0.55, 16);
-      const jointGeo = new THREE.SphereGeometry(0.1, 16, 16);
-
-      const uArmL = new THREE.Mesh(upperArmGeo, matBody); uArmL.position.y = -0.3;
-      const lArmL = new THREE.Mesh(lowerArmGeo, matBody); lArmL.position.y = -0.9;
-      const wristL = new THREE.Mesh(jointGeo, matAccent); wristL.position.y = -1.2;
-      const jointL = new THREE.Mesh(jointGeo, matAccent);
-      jointL.position.set(-0.7, shoulderY, 0);
-      armL.position.copy(jointL.position);
-      armL.add(uArmL,lArmL,wristL);
-
-      const uArmR = new THREE.Mesh(upperArmGeo, matBody); uArmR.position.y = -0.3;
-      const lArmR = new THREE.Mesh(lowerArmGeo, matBody); lArmR.position.y = -0.9;
-      const wristR = new THREE.Mesh(jointGeo, matAccent); wristR.position.y = -1.2;
-      const jointR = new THREE.Mesh(jointGeo, matAccent);
-      jointR.position.set(0.7, shoulderY, 0);
-      armR.position.copy(jointR.position);
-      armR.add(uArmR,lArmR,wristR);
-
-      bot.add(armL, armR, jointL, jointR);
-
-      // Legs
-      const hips = new THREE.Mesh(new THREE.BoxGeometry(0.9,0.28,0.55), matDark);
-      hips.position.y = -0.65; bot.add(hips);
-      const legGeo = new THREE.CylinderGeometry(0.12,0.12,0.9, 16);
-      const legL = new THREE.Mesh(legGeo, matBody); legL.position.set(-0.28, -1.25, 0);
-      const legR = new THREE.Mesh(legGeo, matBody); legR.position.set( 0.28, -1.25, 0);
-      const footGeo = new THREE.BoxGeometry(0.26,0.12,0.45);
-      const footL = new THREE.Mesh(footGeo, matDark); footL.position.set(-0.28, -1.78, 0.1);
-      const footR = new THREE.Mesh(footGeo, matDark); footR.position.set( 0.28, -1.78, 0.1);
-      bot.add(legL, legR, footL, footR);
-
-      // Platform shadow disc for grounding
-      const platform = new THREE.Mesh(new THREE.CylinderGeometry(1.8,1.8,0.02, 48), new THREE.MeshStandardMaterial({color:0x0b0b12, metalness:0, roughness:1}));
-      platform.receiveShadow = true;
-      platform.position.y = -1.9; scene.add(platform);
-
-      // Resize handler
-      function resize(){
-        const rect = canvas.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 1.8);
-        renderer.setPixelRatio(dpr);
-        renderer.setSize(rect.width, rect.height, false);
-        camera.aspect = rect.width/rect.height;
-        camera.updateProjectionMatrix();
-      }
-      new ResizeObserver(resize).observe(canvas.parentElement);
-      resize();
-
-      // Animation state
-      let t = 0, wave = 0, dance = 0;
-      // Cursor look percentages (initialized before animate to avoid TDZ)
-      let lookXpct = 50, lookYpct = 50;
-      const clock = new THREE.Clock();
-
-      function animate(){
-        const dt = clock.getDelta();
-        t += dt;
-        // Idle sway
-        bot.position.y = Math.sin(t*1.5)*0.03;
-        head.rotation.y = Math.sin(t*0.8)*0.15 + (lookXpct-50)/50*0.1;
-
-        // Eyes blink
-        const blink = Math.max(0, Math.sin(t*3.2));
-        eyeL.scale.y = 0.6 + 0.4*blink;
-        eyeR.scale.y = 0.6 + 0.4*blink;
-
-        // Wave
-        if(wave>0){
-          const f = Math.sin(t*8)*0.6;
-          armR.rotation.z = -1.1 + f; // raised and waving
-          wave = Math.max(0, wave - dt*0.5);
-        } else {
-          armR.rotation.z = Math.sin(t*1.2)*0.05;
-        }
-
-        // Dance
-        if(dance>0){
-          const d = Math.sin(t*6)*0.3;
-          bot.rotation.y = Math.sin(t*2)*0.2;
-          legL.position.y = -1.25 + d*0.2; legR.position.y = -1.25 - d*0.2;
-          dance = Math.max(0, dance - dt*0.25);
-        } else {
-          bot.rotation.y *= 0.95;
-          legL.position.y = THREE.MathUtils.lerp(legL.position.y, -1.25, 0.08);
-          legR.position.y = THREE.MathUtils.lerp(legR.position.y, -1.25, 0.08);
-        }
-
-        renderer.render(scene,camera);
-        requestAnimationFrame(animate);
-      }
-      animate();
-
-      // Mouse look-at (in hero parallax space)
-      // lookXpct/lookYpct already declared above
-      const heroEl = document.querySelector('.hero');
-      heroEl.addEventListener('pointermove', (e)=>{
-        const r = heroEl.getBoundingClientRect();
-        lookXpct = (e.clientX - r.left)/r.width*100;
-        lookYpct = (e.clientY - r.top)/r.height*100;
-        const lookX = (lookXpct-50)/50*0.3;
-        const lookY = (lookYpct-50)/50*0.15;
-        head.rotation.y = lookX;
-        head.rotation.x = -lookY;
-      }, {passive:true});
-
-      // Controls
-      document.getElementById('botWave').addEventListener('click', ()=>{ wave = 2.5; speech('Waving hello!'); });
-      document.getElementById('botDance').addEventListener('click', ()=>{ dance = 6; speech('Dance mode engaged.'); });
-
-      function speech(text){
-        try{
-          if('speechSynthesis' in window){
-            const u = new SpeechSynthesisUtterance(text);
-            u.pitch = 1.1; u.rate = 1.05; u.volume = 0.6;
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(u);
-          }
-        }catch(err){/* no-op */}
-      }
-    })();
   </script>
 </body>
 </html>
