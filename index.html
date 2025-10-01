@@ -66,7 +66,7 @@
         var(--bg);
       view-transition-name: welcome;
     }
-    #welcome.hidden{ pointer-events:none; animation: welcomeOut 780ms var(--ease-2) forwards; }
+    #welcome.hidden{ pointer-events:none; animation: welcomeOut 820ms var(--ease-2) forwards; }
     @keyframes welcomeOut{
       0%{ opacity:1; filter:none; backdrop-filter:none }
       100%{ opacity:0; filter: blur(6px) saturate(1.05); }
@@ -113,19 +113,40 @@
     .w-chips{ margin:18px auto 8px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
     .chip{ padding:.5rem .85rem; border-radius:999px; font-weight:700; background:rgba(255,255,255,.06); border:1px solid var(--border); backdrop-filter: blur(6px); }
     .w-cta{ display:flex; gap:12px; justify-content:center; align-items:center; margin-top:18px; flex-wrap:wrap; }
-    .btn{ display:inline-flex; align-items:center; gap:.6rem; padding:.85rem 1.15rem; border-radius:999px; border:1px solid var(--border); font-weight:800; background:transparent; }
+    .btn{ display:inline-flex; align-items:center; gap:.6rem; padding:.85rem 1.15rem; border-radius:999px; border:1px solid var(--border); font-weight:800; background:transparent; cursor:pointer; }
     .btn.primary{ background:linear-gradient(135deg,var(--gradA),var(--gradB)); color:white; border:none }
     .btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.25) }
     .btn:active{ transform: translateY(0) }
-    .w-row{ display:flex; gap:12px; align-items:center; justify-content:center; margin-top:10px; color:var(--muted); font-weight:600; }
-    label.switch{ display:inline-flex; gap:10px; align-items:center; cursor:pointer; user-select:none; }
-    .switch input{appearance:none; width:40px; height:24px; border-radius:999px; position:relative; outline: none; background:#2a2a3e; border:1px solid var(--border); transition:background var(--dur-1) var(--ease-1)}
-    .switch input::after{content:""; position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%; background:white; transition: transform var(--dur-1) var(--ease-1)}
-    .switch input:checked{ background: linear-gradient(135deg,var(--gradA),var(--gradB)) }
-    .switch input:checked::after{ transform: translateX(16px) }
     .w-footer{ position:fixed; left:0; right:0; bottom:12px; text-align:center; color:var(--muted); font-size:.92rem; z-index:2; }
 
-    /* ======= PORTFOLIO STYLES (YOUR ORIGINAL) ======= */
+    /* === PROGRESS SCRIM during dissolve === */
+    #progressScrim{
+      position: fixed; inset:0; z-index: 10000; display:none;
+      align-items: center; justify-content: center;
+      background: radial-gradient(60% 40% at 50% 50%, rgba(0,0,0,.35), rgba(0,0,0,.55));
+      backdrop-filter: blur(6px) saturate(1.05);
+    }
+    #progressScrim.show{ display:flex; animation: scrimIn 180ms var(--ease-1) forwards; }
+    @keyframes scrimIn{ from{ opacity:0 } to{ opacity:1 } }
+    .progress-shell{
+      width:min(420px, 80vw); padding:16px 14px; border-radius:16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+    .progress-bar{
+      height:8px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.1);
+    }
+    .progress-fill{
+      width:0%; height:100%;
+      background: linear-gradient(90deg, var(--gradA), var(--gradB));
+      animation: loadbar 820ms var(--ease-2) forwards;
+    }
+    @keyframes loadbar{ from{ width:0% } to{ width:100% } }
+    .progress-text{
+      display:flex; align-items:center; gap:10px; margin:10px 2px 8px; color:var(--muted); font-weight:700; font-size:.95rem;
+    }
+
+    /* ======= PORTFOLIO STYLES (original) ======= */
     .header{position:sticky;top:0;z-index:50; backdrop-filter:saturate(1.2) blur(10px); background:var(--header-bg); border-bottom:1px solid var(--header-border); transition:background var(--dur-1) var(--ease-1),border-color var(--dur-1) var(--ease-1)}
     .header[data-scrolled="true"]{background:var(--header-bg-solid); border-bottom-color:var(--header-border-strong)}
     .nav{max-width:1200px;margin:auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
@@ -253,6 +274,7 @@
       .grid-bg,.portrait .frame,.btn,.proj,.card,.chip,.pill{transition:none !important}
       ::view-transition-old(page), ::view-transition-new(page){animation: none !important}
       #welcome{display:none !important}
+      #progressScrim{display:none !important}
     }
   </style>
 
@@ -291,17 +313,19 @@
         </div>
         <div class="w-cta">
           <button class="btn primary" id="enterBtn"><i class="fa-solid fa-rocket"></i> Enter Portfolio</button>
-          <button class="btn" id="skipOnce"><i class="fa-solid fa-forward-step"></i> Skip this time</button>
-        </div>
-        <div class="w-row">
-          <label class="switch" title="Don’t show this intro again">
-            <input id="remember" type="checkbox" />
-            <span>Skip intro next time</span>
-          </label>
+          <button class="btn" id="skipOnce"><i class="fa-solid fa-forward-step"></i> Skip</button>
         </div>
       </div>
     </section>
     <p class="w-footer">© <span id="wYear"></span> Sanithu Hulathduwage</p>
+  </div>
+
+  <!-- === PROGRESS SCRIM (appears during dissolve) === -->
+  <div id="progressScrim" aria-hidden="true">
+    <div class="progress-shell">
+      <div class="progress-text"><i class="fa-solid fa-circle-notch fa-spin"></i> Preparing portfolio…</div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
   </div>
 
   <!-- ==================== PORTFOLIO ==================== -->
@@ -516,38 +540,45 @@
   </footer>
 
   <script>
-    // ========= WELCOME CONTROLLER =========
+    // ========= WELCOME + PROGRESS SCRIM =========
     const w = document.getElementById('welcome');
     const enterBtn = document.getElementById('enterBtn');
     const skipOnce = document.getElementById('skipOnce');
-    const remember = document.getElementById('remember');
     const wYear = document.getElementById('wYear');
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const scrim = document.getElementById('progressScrim');
+
     wYear.textContent = new Date().getFullYear();
 
+    function showScrim(){
+      if (!scrim) return;
+      scrim.classList.add('show');
+      // restart bar animation by replacing node (ensures fresh animation on repeat)
+      const bar = scrim.querySelector('.progress-fill');
+      if(bar){
+        const clone = bar.cloneNode(true);
+        bar.parentNode.replaceChild(clone, bar);
+      }
+    }
     function hideWelcome(silent=false){
       if(!w) return;
+      showScrim();
+      const done = ()=>{ w.style.display='none'; document.body.style.overflow='auto'; scrim.style.display='none'; };
       if (document.startViewTransition && !prefersReduced && !silent){
         document.startViewTransition(()=> w.classList.add('hidden'));
-        setTimeout(()=>{ w.style.display='none'; document.body.style.overflow='auto'; }, 780);
+        setTimeout(done, 840); // slightly longer than CSS to feel complete
       } else {
         w.classList.add('hidden');
-        setTimeout(()=>{ w.style.display='none'; document.body.style.overflow='auto'; }, 780);
+        setTimeout(done, 840);
       }
     }
 
-    // Preference restore
-    const shouldSkip = localStorage.getItem('skipWelcome') === 'true';
-    remember.checked = shouldSkip;
-    if(shouldSkip || prefersReduced){ w.style.display='none'; document.body.style.overflow='auto'; }
-
-    remember.addEventListener('change', ()=> localStorage.setItem('skipWelcome', remember.checked ? 'true' : 'false'));
     enterBtn?.addEventListener('click', ()=> hideWelcome());
     skipOnce?.addEventListener('click', ()=> hideWelcome(true));
 
     // Auto-advance after dwell unless interaction
     let autoTimer=null;
-    if(!prefersReduced && !shouldSkip){
+    if(!prefersReduced){
       autoTimer = setTimeout(()=> hideWelcome(true), 5200);
       ['pointerdown','keydown','touchstart'].forEach(ev=>{
         window.addEventListener(ev, ()=>{ if(autoTimer){ clearTimeout(autoTimer); autoTimer=null; } }, {once:true, passive:true});
@@ -555,7 +586,7 @@
     }
 
     // Welcome parallax + particles (if visible)
-    if(w && w.style.display !== 'none'){
+    if(w){
       const stage = w;
       const bg = w.querySelector('.grid-fx');
       let mx=50,my=50,ticking=false;
@@ -587,14 +618,15 @@
       if(!prefersReduced) loop();
     }
 
-    // ========= THEME & VIEW TRANSITIONS =========
+    // ========= THEME: Default dark, respect system preference =========
     const themeToggle = document.getElementById('themeToggle');
     const root = document.documentElement;
     const body = document.body;
     const metaTheme = document.querySelector('meta[name="theme-color"]');
 
-    const setThemeTokens = (mode) => {
+    function setThemeTokens(mode){
       if(mode === 'light'){
+        root.setAttribute('data-theme','light');
         root.style.setProperty('--bg', '#f7f8fc'); root.style.setProperty('--text', '#1a1a1f'); root.style.setProperty('--muted', '#56566a');
         root.style.setProperty('--surface-1', '#ffffff'); root.style.setProperty('--surface-2', '#f2f4f8'); root.style.setProperty('--surface-3', '#e9ecf3');
         root.style.setProperty('--border', 'rgba(0,0,0,.08)'); root.style.setProperty('--header-bg', 'rgba(255,255,255,.35)');
@@ -603,6 +635,7 @@
         body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.18), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.18), transparent 60%), #f7f8fc';
         metaTheme?.setAttribute('content', '#f7f8fc');
       } else {
+        root.setAttribute('data-theme','dark');
         root.style.setProperty('--bg', '#0b0b12'); root.style.setProperty('--text', '#e9e9f1'); root.style.setProperty('--muted', '#b8b8cf');
         root.style.setProperty('--surface-1', '#121225'); root.style.setProperty('--surface-2', '#0f0f1d'); root.style.setProperty('--surface-3', '#14142a');
         root.style.setProperty('--border', 'rgba(255,255,255,.08)'); root.style.setProperty('--header-bg', 'rgba(11,11,18,.35)');
@@ -611,15 +644,21 @@
         body.style.background = 'radial-gradient(1200px 600px at 10% -10%, rgba(102,126,234,.25), transparent 60%), radial-gradient(900px 500px at 110% 0%, rgba(118,75,162,.2), transparent 60%), #0b0b12';
         metaTheme?.setAttribute('content', '#0b0b12');
       }
-    };
-    const applyTheme = (mode) => { document.documentElement.setAttribute('data-theme', mode); setThemeTokens(mode); localStorage.setItem('theme', mode); };
-    const saved = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    applyTheme(saved || (systemPrefersDark ? 'dark' : 'light'));
+    }
+
+    // Apply system preference on first load (default dark if API missing)
+    const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setThemeTokens(systemDark ? 'dark' : 'light');
+
+    // Toggle (no remember/persistence; session-only)
     themeToggle?.addEventListener('click', ()=>{
-      const current = localStorage.getItem('theme') || (systemPrefersDark ? 'dark' : 'light');
+      const current = root.getAttribute('data-theme') || (systemDark ? 'dark' : 'light');
       const next = current === 'dark' ? 'light' : 'dark';
-      if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(() => applyTheme(next)); else applyTheme(next);
+      if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.startViewTransition(()=> setThemeTokens(next));
+      } else {
+        setThemeTokens(next);
+      }
     });
 
     // ========= HEADER SCROLL STATE =========
